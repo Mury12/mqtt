@@ -12,7 +12,7 @@
 `git checkout -b dev`
 
 - Atualizar ramo de desenvolvimento
-`git pull dev`
+`git pull origin dev`
 
 # Fluxo de Trabalho
 Ao utilizar um repositório não utilize o ramo principal para desenvolver sua atividade, ao invés disso, crie um novo ramo a partir do ramo principal
