@@ -1,7 +1,7 @@
 # Utilização do Git
 
 - Instalar Git
-`sudo apt-get install upgrade`
+`sudo apt-get install updade`
 `sudo apt-get install git`
 
 - Iniciar repositório
