@@ -1,8 +1,12 @@
 # Utilização do Git
 
 - Instalar Git
-`sudo apt-get install updade`
+`sudo apt-get install update`
 `sudo apt-get install git`
+
+- Configurar Git
+`git config --global user.name "Seu Nome`
+`git config --global user.email email@example.com`
 
 - Iniciar repositório
 `cd ~/sua-pasta/`
