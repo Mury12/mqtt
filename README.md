@@ -10,7 +10,7 @@
 
 - Iniciar repositório
 `cd ~/sua-pasta/`
-`git clone https://github.com/Mury12/mqqt`
+`git clone https://github.com/Mury12/mqtt`
  
 - Criar ramo de desenvolvimento
 `git checkout -b dev`
@@ -34,4 +34,3 @@ A partir desse momento você está apto para modificar o código sem interferir 
 - Retorne para o ramo principal e atualize seu repositório.
 `git checkout dev`
 `git pull origin dev`
-Teste de branch.
