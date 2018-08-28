@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.mqtt.app;
 
 /**
  * Hello world!
