@@ -10,7 +10,7 @@
 
 - Iniciar repositório
 `cd ~/sua-pasta/`
-`git clone https://github.com/Mury12/mqqt`
+`git clone https://github.com/Mury12/mqtt`
  
 - Criar ramo de desenvolvimento
 `git checkout -b dev`
