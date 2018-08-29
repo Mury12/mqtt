@@ -14,6 +14,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  * @author andremury
  */
 public class Publisher {
+
     /**
      * @var client This is the client instance of the MQTT.
      */
@@ -25,12 +26,7 @@ public class Publisher {
     /**
      * @var serverURI This is the URI to the server connection wanted.
      */
-    private String serverURI = "tcp://localhost:4444";
-    /**
-     * @var cliendId This will be the unique ID generated for the client
-     * connection.
-     */
-    private String clientId = MqttClient.generateClientId();
+    private String serverURI = "tcp://localhost:1883";
 
     /**
      * This is the class constructor that will initialize every dependency and
@@ -39,10 +35,40 @@ public class Publisher {
      * @throws MqttException
      */
     public Publisher() throws MqttException {
-        client = new MqttClient(serverURI, clientId);
-        msg = new MqttMessage();
-        msg.setPayload("Hello World from MQTT!".getBytes());
-        client.publish("iot_data", msg);
-        client.disconnect();
+        this.client = new MqttClient(serverURI, MqttClient.generateClientId());
+        this.msg = new MqttMessage();
+    }
+
+    public boolean publish(String message) throws MqttException {
+        try {
+            msg.setPayload(message.getBytes());
+            client.publish("iot_data", this.msg);
+            return true;
+        } catch (MqttException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    public boolean connect() throws MqttException {
+        try {
+            this.client.connect();
+            System.out.println("Client connected.");
+            return true;
+        } catch (MqttException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    public boolean disconnect() throws MqttException {
+        try {
+            this.client.disconnect();
+            System.out.println("Client disconnected.");
+            return true;
+        } catch (MqttException e) {
+            System.out.println(e);
+        }
+        return false;
     }
 }
