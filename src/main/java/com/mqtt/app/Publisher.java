@@ -26,7 +26,7 @@ public class Publisher {
     /**
      * @var serverURI This is the URI to the server connection wanted.
      */
-    private String serverURI = "tcp://localhost:1883";
+    private String serverURI = "tcp://themayhem.ddns.net:1883";
 
     /**
      * This is the class constructor that will initialize every dependency and

@@ -30,8 +30,9 @@ public class App {
                     str = s.next();
                     
                     if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
-                        System.out.println("Program exiting. Farewell");
+                        System.out.println("Program exiting. Farewell!");
                         pub.disconnect();
+                        return;
                     }
                     
                     if(pub.publish(str)){

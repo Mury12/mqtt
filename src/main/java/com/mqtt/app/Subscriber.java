@@ -23,7 +23,7 @@ public class Subscriber {
     /**
      * @var msg This is the message that will be published.
      */
-    private String serverURI = "tcp://localhost:1883";
+    private String serverURI = "tcp://themayhem.ddns.net:1883";
 
     
     /**
