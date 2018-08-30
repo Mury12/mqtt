@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Subscribe;
+package com.mqtt.app.Publish;
 
 import com.mqtt.app.Config;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -13,7 +13,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  *
  * @author andremury
  */
-public class Subscriber {
+public class PublishSubscriber {
 
     /**
      * @var client This is the client instance of the MQTT.
@@ -23,14 +23,14 @@ public class Subscriber {
      * @var msg This is the message that will be published.
      */
     private String serverURI;
-
+    private static String t;
     /**
      * This is the class constructor that will initialize every dependency and
      * parts needed to the class.
      *
      * @throws MqttException
      */
-    public Subscriber() throws MqttException {
+    public PublishSubscriber() throws MqttException {
         this.serverURI = Config.getFullURI();
         client = new MqttClient(serverURI, MqttClient.generateClientId());
     }
@@ -38,15 +38,18 @@ public class Subscriber {
     /**
      * Creates a connection.
      *
-     * @return success state boolean
+     * @return success st
+     * @param topic boolean
      * @throws MqttException
      */
-    public static boolean connect(String topic) throws MqttException {
+    public boolean connect(String topic) throws MqttException, InterruptedException {
+        t = topic;
         try {
-            client.setCallback(new SubscriberCallBack());
+            client.setCallback(new PublisherCallBack());
             client.connect();
             System.out.println("Subscribed to topic " + topic + ".");
-            client.subscribe(topic);
+            client.subscribe(t);
+
             return true;
         } catch (MqttException e) {
             System.out.println(e);
@@ -63,5 +66,19 @@ public class Subscriber {
         }
         return false;
     }
-
+/**
+ * This function is responsible for unsubscribe the client from a certain topic set 
+ * for reply receiving.
+ * @return
+ * @throws MqttException 
+ */
+    public static boolean unsubscribe() throws MqttException {
+        try {
+            client.unsubscribe(t);
+            return true;
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return false;
+    }
 }

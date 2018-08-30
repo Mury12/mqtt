@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Subscribe;
+package com.mqtt.app.states;
 
+import com.mqtt.app.Config;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -26,7 +27,7 @@ public class Publisher {
     /**
      * @var serverURI This is the URI to the server connection wanted.
      */
-    private String serverURI = "tcp://themayhem.ddns.net:1883";
+    private String serverURI;
     private String clientId;
 
     /**
@@ -36,7 +37,7 @@ public class Publisher {
      * @throws MqttException
      */
     public Publisher() throws MqttException {
-
+        serverURI = Config.getFullURI();
         clientId = MqttClient.generateClientId();
         this.client = new MqttClient(serverURI, clientId);
         this.msg = new MqttMessage();
