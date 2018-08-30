@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app;
+package com.mqtt.app.Subscribe;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -27,6 +27,7 @@ public class Publisher {
      * @var serverURI This is the URI to the server connection wanted.
      */
     private String serverURI = "tcp://themayhem.ddns.net:1883";
+    private String clientId;
 
     /**
      * This is the class constructor that will initialize every dependency and
@@ -35,14 +36,16 @@ public class Publisher {
      * @throws MqttException
      */
     public Publisher() throws MqttException {
-        this.client = new MqttClient(serverURI, MqttClient.generateClientId());
+
+        clientId = MqttClient.generateClientId();
+        this.client = new MqttClient(serverURI, clientId);
         this.msg = new MqttMessage();
     }
 
-    public boolean publish(String message) throws MqttException {
+    public boolean publish(String message, String topic) throws MqttException {
         try {
-            msg.setPayload(message.getBytes());
-            client.publish("iot_data", this.msg);
+            msg.setPayload((this.clientId + ": " + message).getBytes());
+            client.publish(topic, this.msg);
             return true;
         } catch (MqttException e) {
             System.out.println(e);
@@ -53,7 +56,6 @@ public class Publisher {
     public boolean connect() throws MqttException {
         try {
             this.client.connect();
-            System.out.println("Client connected.");
             return true;
         } catch (MqttException e) {
             System.out.println(e);
@@ -71,4 +73,5 @@ public class Publisher {
         }
         return false;
     }
+
 }
