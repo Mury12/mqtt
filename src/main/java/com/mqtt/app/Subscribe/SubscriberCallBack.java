@@ -5,8 +5,8 @@
  */
 package com.mqtt.app.Subscribe;
 
+import com.mqtt.app.Config;
 import com.mqtt.app.Controller.OperationController;
-import java.lang.reflect.Array;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -18,7 +18,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
  *
  * @author andremury
  */
-public class SimpleMqttCallBack implements MqttCallback {
+public class SubscriberCallBack implements MqttCallback {
 
     /**
      * This function is responsible to set a message when the server can't be
@@ -28,7 +28,11 @@ public class SimpleMqttCallBack implements MqttCallback {
      */
     public void connectionLost(Throwable thrwbl) {
         System.out.println("Connection lost. Trying to reconnect..");
-        //reconnect()
+        try {
+            reconnect();
+        } catch (MqttException ex) {
+            System.out.println("Connection has dropped. Please restart the subscriber module.");
+        }
     }
 
     /**
@@ -43,7 +47,7 @@ public class SimpleMqttCallBack implements MqttCallback {
         string = new String(mm.getPayload());
         OperationController opc = new OperationController(string);
         opc.init();
-        
+
     }
 
     /**
@@ -56,4 +60,19 @@ public class SimpleMqttCallBack implements MqttCallback {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * This function is responsible for the reconnect trying.
+     *
+     * @return Boolean success state.
+     * @throws MqttException
+     */
+    private boolean reconnect() throws MqttException {
+        try {
+            Subscriber.connect(Config.getTopic());
+            return true;
+        } catch (MqttException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
 }

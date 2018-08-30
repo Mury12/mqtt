@@ -1,22 +1,17 @@
 package com.mqtt.app;
 
-import com.mqtt.app.Subscribe.Subscriber;
-import com.mqtt.app.Subscribe.Publisher;
-import java.util.Scanner;
-import javafx.scene.web.PromptData;
+import com.mqtt.app.Publish.PublishSubscriber;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import com.mqtt.app.Subscribe.Subscriber;
+import com.mqtt.app.states.Publisher;
+import java.util.Scanner;
 
-/**
- * Hello world!
- *
- */
 public class App {
-
     public static Publisher pub;
     public static Subscriber sub;
-    public static String topic = "iot_data";
+    public static String topic = Config.getTopic();
 
-    public static void main(String[] args) throws MqttException {
+    public static void main(String[] args) throws MqttException, InterruptedException {
         String op;
         Scanner s = new Scanner(System.in);
         System.out.println("Welcolme to the MQTT Server-client Project!");
@@ -28,21 +23,25 @@ public class App {
             pub = new Publisher();
             s.nextLine();
             if (pub.connect()) {
-                String str = new String();
-                System.out.println("What do you want to send?");
-                str = s.nextLine();
-                getReply();
+                while (true) {
+                    String str = new String();
+                    Thread.sleep(Config.getTimeout());
 
-                if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
-                    System.out.println("Program exiting. Farewell!");
-                    pub.disconnect();
-                    return;
-                }
+                    System.out.println("What do you want to send?");
+                    str = s.nextLine();
+                    Publisher.getReply();
 
-                if (pub.publish(str, topic)) {
-                    System.out.println("Message sent.");
-                } else {
-                    System.out.println("Something went wrong.. Try again.");
+                    if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
+                        System.out.println("Program exiting. Farewell!");
+                        pub.disconnect();
+                        return;
+                    }
+
+                    if (pub.publish(str, topic)) {
+                        System.out.println("Message sent.");
+                    } else {
+                        System.out.println("Something went wrong.. Try again.");
+                    }
                 }
             }
 
@@ -55,13 +54,4 @@ public class App {
         }
 
     }
-
-    private static void getReply() throws MqttException {
-        sub = new Subscriber();
-        if (sub.connect("andremury")) {
-            System.out.println("reply recieved");
-        }
-
-    }
-
 }
