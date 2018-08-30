@@ -10,6 +10,8 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
+ * This Class represents the Publisher part of subscribing state for reply
+ * receiving.
  *
  * @author andremury
  */
@@ -24,6 +26,7 @@ public class PublishSubscriber {
      */
     private String serverURI;
     private static String t;
+
     /**
      * This is the class constructor that will initialize every dependency and
      * parts needed to the class.
@@ -57,6 +60,12 @@ public class PublishSubscriber {
         return false;
     }
 
+    /**
+     * This function is responsible for disconnecting the client from the
+     * server.
+     *
+     * @return Boolean success state
+     */
     public boolean disconnect() {
         try {
             client.disconnect();
@@ -66,12 +75,14 @@ public class PublishSubscriber {
         }
         return false;
     }
-/**
- * This function is responsible for unsubscribe the client from a certain topic set 
- * for reply receiving.
- * @return
- * @throws MqttException 
- */
+
+    /**
+     * This function is responsible for unsubscribe the client from a certain
+     * topic set for reply receiving.
+     *
+     * @return Boolean for success state.
+     * @throws MqttException
+     */
     public static boolean unsubscribe() throws MqttException {
         try {
             client.unsubscribe(t);

@@ -29,7 +29,7 @@ public class App {
 
                     System.out.println("What do you want to send?");
                     str = s.nextLine();
-                    getReply();
+                    Publisher.getReply();
 
                     if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
                         System.out.println("Program exiting. Farewell!");
@@ -54,13 +54,4 @@ public class App {
         }
 
     }
-
-    private static boolean getReply() throws MqttException, InterruptedException {
-        PublishSubscriber psub = new PublishSubscriber();
-        if (psub.connect("andremury")) {
-            return true;
-        }
-        return false;
-    }
-
 }

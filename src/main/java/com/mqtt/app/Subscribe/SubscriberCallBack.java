@@ -60,6 +60,12 @@ public class SubscriberCallBack implements MqttCallback {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * This function is responsible for the reconnect trying.
+     *
+     * @return Boolean success state.
+     * @throws MqttException
+     */
     private boolean reconnect() throws MqttException {
         try {
             Subscriber.connect(Config.getTopic());

@@ -6,6 +6,7 @@
 package com.mqtt.app.states;
 
 import com.mqtt.app.Config;
+import com.mqtt.app.Publish.PublishSubscriber;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -28,6 +29,9 @@ public class Publisher {
      * @var serverURI This is the URI to the server connection wanted.
      */
     private String serverURI;
+    /**
+     * T@var clientId This is the client ID tha will be generated later.
+     */
     private String clientId;
 
     /**
@@ -43,6 +47,14 @@ public class Publisher {
         this.msg = new MqttMessage();
     }
 
+    /**
+     * This function is responsible for publish a message to the topic.
+     *
+     * @param message String message.
+     * @param topic String topic wanted.
+     * @return Boolean success state.
+     * @throws MqttException
+     */
     public boolean publish(String message, String topic) throws MqttException {
         try {
             msg.setPayload((this.clientId + ": " + message).getBytes());
@@ -54,6 +66,12 @@ public class Publisher {
         return false;
     }
 
+    /**
+     * This function is responsible to create a connection to the server.
+     *
+     * @return Boolean success state.
+     * @throws MqttException
+     */
     public boolean connect() throws MqttException {
         try {
             this.client.connect();
@@ -64,6 +82,13 @@ public class Publisher {
         return false;
     }
 
+    /**
+     * This function is responsible for disconnecting the publisher from the
+     * server.
+     *
+     * @return Boolean success state.
+     * @throws MqttException
+     */
     public boolean disconnect() throws MqttException {
         try {
             this.client.disconnect();
@@ -71,6 +96,22 @@ public class Publisher {
             return true;
         } catch (MqttException e) {
             System.out.println(e);
+        }
+        return false;
+    }
+
+    /**
+     * This function is responsible for getting a reply from a specific unique
+     * client-server topic.
+     *
+     * @return Boolean success state.
+     * @throws MqttException
+     * @throws InterruptedException
+     */
+    public static boolean getReply() throws MqttException, InterruptedException {
+        PublishSubscriber psub = new PublishSubscriber();
+        if (psub.connect("andremury")) {
+            return true;
         }
         return false;
     }

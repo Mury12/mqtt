@@ -54,6 +54,12 @@ public class Subscriber {
         return false;
     }
 
+    /**
+     * This function is responsible for disconnecting the subscriber from the
+     * host.
+     *
+     * @return Bollean success state.
+     */
     public boolean disconnect() {
         try {
             client.disconnect();
