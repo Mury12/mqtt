@@ -1,10 +1,10 @@
 package com.mqtt.app;
 
 import com.mqtt.app.Publish.PublishSubscriber;
-import org.eclipse.paho.client.mqttv3.MqttException;
 import com.mqtt.app.Subscribe.Subscriber;
 import com.mqtt.app.states.Publisher;
 import java.util.Scanner;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 public class App {
     public static Publisher pub;
