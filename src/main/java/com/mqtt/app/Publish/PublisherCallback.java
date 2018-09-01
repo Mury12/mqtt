@@ -5,6 +5,7 @@
  */
 package com.mqtt.app.Publish;
 
+import com.mqtt.app.Services.Replyer;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -38,6 +39,7 @@ public class PublisherCallback implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
         System.out.println("Reply: " + unjoin(string, ": ")[1] + ".");
+        Replyer.setReply("Reply: " + unjoin(string, ": ")[1] + ".");
         ReplyGetter.unsubscribe();
     }
 
@@ -50,6 +52,7 @@ public class PublisherCallback implements MqttCallback {
     public void deliveryComplete(IMqttDeliveryToken imdt) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     private String[] unjoin(String payload, String delimiter) {
         return payload.split(delimiter);
     }
