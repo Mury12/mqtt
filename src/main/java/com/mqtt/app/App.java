@@ -1,6 +1,6 @@
 package com.mqtt.app;
 
-import com.mqtt.app.Publish.PublishSubscriber;
+import com.mqtt.app.Publish.ReplyGetter;
 import com.mqtt.app.Subscribe.Subscriber;
 import com.mqtt.app.states.Publisher;
 import java.util.Scanner;

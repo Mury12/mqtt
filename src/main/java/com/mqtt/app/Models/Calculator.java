@@ -10,5 +10,16 @@ package com.mqtt.app.Models;
  * @author andremury
  */
 public class Calculator {
-    String[] values;
+
+    public int sumValues(String[] arr) {
+        int s = 0;
+        System.out.print("Sum: ");
+        System.out.print(String.join(" + ", arr));
+        for (String a : arr) {
+            s += Integer.parseInt(a);
+        }
+        System.out.println(" Done.");
+        System.out.println("Result: " + s);
+        return s;
+    }
 }

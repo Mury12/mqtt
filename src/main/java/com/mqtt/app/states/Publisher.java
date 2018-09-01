@@ -6,7 +6,7 @@
 package com.mqtt.app.states;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.Publish.PublishSubscriber;
+import com.mqtt.app.Publish.ReplyGetter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -109,7 +109,7 @@ public class Publisher {
      * @throws InterruptedException
      */
     public static boolean getReply() throws MqttException, InterruptedException {
-        PublishSubscriber psub = new PublishSubscriber();
+        ReplyGetter psub = new ReplyGetter();
         if (psub.connect("andremury")) {
             return true;
         }

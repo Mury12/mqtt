@@ -5,6 +5,7 @@
  */
 package com.mqtt.app.Controller;
 
+import com.mqtt.app.Models.Calculator;
 import com.mqtt.app.states.Publisher;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -80,16 +81,13 @@ public class OperationController {
     public void doOperation(String payload) throws MqttException {
         String clientId = this.getClientId(payload);
         String[] arr = this.getValues(payload);
-        String option = arr[0];
-        int s = 0;
-        System.out.print("Sum: ");
-        System.out.print(String.join(" + ", arr));
-        for (String a : arr) {
-            s += Integer.parseInt(a);
-        }
-        System.out.println(" Done.");
-        System.out.println("Result: " + s);
-        if (callBack(Integer.toString(s), clientId)) {
+        int reply;
+        
+        Calculator calc = new Calculator();
+        
+        reply = calc.sumValues(arr);
+        
+        if (callBack(Integer.toString(reply), clientId)) {
             System.out.println("Reply sent.");
         } else {
             System.out.println("Reply failed.");

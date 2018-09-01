@@ -43,7 +43,7 @@ public class Subscriber {
      */
     public static boolean connect(String topic) throws MqttException {
         try {
-            client.setCallback(new SubscriberCallBack());
+            client.setCallback(new SubscriberCallback());
             client.connect();
             System.out.println("Subscribed to topic " + topic + ".");
             client.subscribe(topic);

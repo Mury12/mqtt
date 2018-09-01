@@ -15,7 +15,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  *
  * @author andremury
  */
-public class PublishSubscriber {
+public class ReplyGetter {
 
     /**
      * @var client This is the client instance of the MQTT.
@@ -33,7 +33,7 @@ public class PublishSubscriber {
      *
      * @throws MqttException
      */
-    public PublishSubscriber() throws MqttException {
+    public ReplyGetter() throws MqttException {
         this.serverURI = Config.getFullURI();
         client = new MqttClient(serverURI, MqttClient.generateClientId());
     }
@@ -48,7 +48,7 @@ public class PublishSubscriber {
     public boolean connect(String topic) throws MqttException, InterruptedException {
         t = topic;
         try {
-            client.setCallback(new PublisherCallBack());
+            client.setCallback(new PublisherCallback());
             client.connect();
             System.out.println("Subscribed to topic " + topic + ".");
             client.subscribe(t);
