@@ -9,14 +9,14 @@ package com.mqtt.app.Services;
  *
  * @author andremury
  */
-public class Replyer {
+public class ReplierService {
     static String reply = new String();
     public static String getReply() {
         return reply;
     }
 
     public static void setReply(String reply) {
-        Replyer.reply = reply;
+        ReplierService.reply = reply;
     }
 
 

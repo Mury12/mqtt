@@ -5,7 +5,7 @@
  */
 package com.mqtt.app.Models;
 
-import com.mqtt.app.Services.Replyer;
+import com.mqtt.app.Services.ReplierService;
 
 /**
  *
@@ -22,7 +22,7 @@ public class Calculator {
         }
         System.out.println(" Done.");
         System.out.println("Result: " + s);
-        Replyer.setReply("Sum: " + String.join(" + ", arr) + " done.\n Result: " + s);
+        ReplierService.setReply("Sum: " + String.join(" + ", arr) + " done.\n Result: " + s);
         return s;
     }
 }

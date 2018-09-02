@@ -7,54 +7,52 @@ package com.mqtt.app.Controller;
 
 import static com.mqtt.app.App.topic;
 import com.mqtt.app.Config;
-import com.mqtt.app.Services.Replyer;
-import com.mqtt.app.states.Publisher;
+import com.mqtt.app.Services.ReplierService;
+import com.mqtt.app.Models.Publisher;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
  * @author andremury
  */
-public class PublishController {
+public final class PublishController {
 
     Publisher pub;
+    String values;
 
-    public PublishController() throws MqttException, InterruptedException {
+    public PublishController(String values) throws MqttException, InterruptedException {
+        this.values = values;
         try {
             init();
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
+            System.out.println(e);
+        } catch (MqttException e) {
             System.out.println(e);
         }
     }
 
     public void init() throws MqttException, InterruptedException {
-        System.out.println("You are publishing.");
         try {
             this.pub = new Publisher();
-        } catch (Exception e) {
+        } catch (MqttException e) {
             System.out.println(e);
-        }//            s.nextLine();
-        if (pub.connect()) {
-            String str = new String();
+        }
 
-            System.out.println("What do you want to send?");
-//                    str = s.nextLine();
+        if (pub.connect()) {
+
             Publisher.getReply();
 
-            if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
-                System.out.println("Program exiting. Farewell!");
-                pub.disconnect();
-                return;
-            }
-
-            if (pub.publish("1 2 3 4 5", topic)) {
+            if (pub.publish(this.values, topic)) {
                 System.out.println("Message sent.");
             } else {
                 System.out.println("Something went wrong.. Try again.");
             }
-            while (!Replyer.got()) {
+            int i = 0;
+            while (i < 10 && !ReplierService.got()) {
                 Thread.sleep(Config.getTimeout());
+                ++i;
             }
+            pub.disconnect();
         }
     }
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.states;
+package com.mqtt.app.Models;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.Publish.ReplyGetter;
