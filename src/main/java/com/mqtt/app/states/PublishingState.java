@@ -8,7 +8,7 @@ package com.mqtt.app.states;
 import com.mqtt.app.App;
 import com.mqtt.app.Config;
 import com.mqtt.app.Controller.PublishController;
-import com.mqtt.app.GUI;
+import com.mqtt.app.GraphicUserInterface;
 import com.mqtt.app.Services.ReplierService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,7 +82,7 @@ public class PublishingState {
         left.setOrientation(Orientation.HORIZONTAL);
         left.setPrefTileHeight(50);
         left = addButtons(left);
-        left = GUI.fillBackground(left, "c7c7c7");
+        left = GraphicUserInterface.fillBackground(left, "c7c7c7");
 
         pane.setOrientation(Orientation.VERTICAL);
         pane.getChildren().add(left);
@@ -100,7 +100,7 @@ public class PublishingState {
     private TilePane setBottomPane(TilePane pane) {
         TilePane right = new TilePane();
         right.setOrientation(Orientation.HORIZONTAL);
-        right = GUI.fillBackground(right, "c2c2c2");
+        right = GraphicUserInterface.fillBackground(right, "c2c2c2");
         right.setAlignment(Pos.CENTER);
         right.getChildren().addAll(values, reply);
         pane.getChildren().add(right);
@@ -142,6 +142,7 @@ public class PublishingState {
                     if (ReplierService.getReply().length() < 1) {
                         reply.setText("No reply from server, try Again.");
                     }
+                    ReplierService.resetReply();
                 } catch (MqttException ex) {
                     Logger.getLogger(PublishingState.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {

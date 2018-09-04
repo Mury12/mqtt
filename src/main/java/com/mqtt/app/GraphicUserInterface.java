@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mqtt.app;
 
-import com.mqtt.app.Services.ReplierService;
 import com.mqtt.app.states.PublishingState;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -27,7 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class GUI extends Application implements EventHandler<ActionEvent> {
+public class GraphicUserInterface extends Application implements EventHandler<ActionEvent> {
 
     boolean publish = false,
             subscribe = false;
@@ -35,6 +29,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     public Scene root;
     Label reply = new Label();
 
+    public GraphicUserInterface() {
+    }    
+    
     public static void main(String args[]) {
         launch(args);
     }
@@ -88,9 +85,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
                     App app = new App();
                     app.init("sub", "");
                 } catch (MqttException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GraphicUserInterface.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GraphicUserInterface.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
