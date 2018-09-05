@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Services;
+package com.mqtt.app.services;
 
 /**
  *

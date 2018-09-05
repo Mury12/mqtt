@@ -7,13 +7,12 @@ package com.mqtt.app.states;
 
 import com.mqtt.app.App;
 import com.mqtt.app.Config;
-import com.mqtt.app.Controller.PublishController;
-import com.mqtt.app.GraphicUserInterface;
-import com.mqtt.app.Services.ReplierService;
+import com.mqtt.app.controller.PublishController;
+import com.mqtt.app.generators.GUI;
+import com.mqtt.app.services.ReplierService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -44,7 +43,6 @@ public class PublishingState {
         pane.setPrefSize(500, 500);
         pane = setTile(pane);
         App app = new App();
-//        app.init("pub", args);
         return pane;
     }
 
@@ -82,7 +80,7 @@ public class PublishingState {
         left.setOrientation(Orientation.HORIZONTAL);
         left.setPrefTileHeight(50);
         left = addButtons(left);
-        left = GraphicUserInterface.fillBackground(left, "c7c7c7");
+        left = GUI.fillBackground(left, "c7c7c7");
 
         pane.setOrientation(Orientation.VERTICAL);
         pane.getChildren().add(left);
@@ -100,7 +98,7 @@ public class PublishingState {
     private TilePane setBottomPane(TilePane pane) {
         TilePane right = new TilePane();
         right.setOrientation(Orientation.HORIZONTAL);
-        right = GraphicUserInterface.fillBackground(right, "c2c2c2");
+        right = GUI.fillBackground(right, "c2c2c2");
         right.setAlignment(Pos.CENTER);
         right.getChildren().addAll(values, reply);
         pane.getChildren().add(right);
@@ -135,12 +133,16 @@ public class PublishingState {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent t) {
                 try {
-                    PublishController c = new PublishController(values.getText() + "::" + operation);
-                    c.init();
-                    Thread.sleep(Config.getTimeout());
-                    reply.setText(ReplierService.getReply());
-                    if (ReplierService.getReply().length() < 1) {
-                        reply.setText("No reply from server, try Again.");
+                    if (values.getText().length() > 0){
+                        PublishController c = new PublishController(values.getText() + "::" + operation);
+                        c.init();
+                        Thread.sleep(Config.getTimeout());
+                        reply.setText(ReplierService.getReply());
+                        if (ReplierService.getReply().length() < 1) {
+                            reply.setText("No reply from server, try Again.");
+                        }
+                    }else{
+                        reply.setText("Please insert at least one value.");
                     }
                     ReplierService.resetReply();
                 } catch (MqttException ex) {

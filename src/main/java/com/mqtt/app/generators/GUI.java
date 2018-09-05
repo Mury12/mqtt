@@ -1,5 +1,6 @@
-package com.mqtt.app;
+package com.mqtt.app.generators;
 
+import com.mqtt.app.App;
 import com.mqtt.app.states.PublishingState;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class GraphicUserInterface extends Application implements EventHandler<ActionEvent> {
+public class GUI extends Application implements EventHandler<ActionEvent> {
 
     boolean publish = false,
             subscribe = false;
@@ -29,10 +30,11 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
     public Scene root;
     Label reply = new Label();
 
-    public GraphicUserInterface() {
-    }    
-    
-    public static void main(String args[]) {
+    public GUI() {
+
+    }
+
+    public static void go(String[] args) {
         launch(args);
     }
 
@@ -44,6 +46,10 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
         stage.show();
     }
 
+    @Override
+    public void stop(){
+        System.exit(0);
+    }
     private Scene getStage() {
         StackPane l = new StackPane();
         Scene s = new Scene(l);
@@ -51,7 +57,8 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
     }
 
     /**
-     * Defines an initial pane. 
+     * Defines an initial pane.
+     *
      * @return the scene.
      */
     private Scene setInitialStage() {
@@ -85,9 +92,9 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
                     App app = new App();
                     app.init("sub", "");
                 } catch (MqttException ex) {
-                    Logger.getLogger(GraphicUserInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
-                    Logger.getLogger(GraphicUserInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -97,10 +104,11 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
 
     /**
      * Starts the chosen module.
+     *
      * @param option String with the module option.
      * @param args String original payload.
      * @throws MqttException
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     private void initApp(String option, String args) throws MqttException, InterruptedException {
         App a = new App();
@@ -115,6 +123,7 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
 
     /**
      * Fills a pane background with a chose Hex color.
+     *
      * @param pane The original pane.
      * @param hexColor The Hex color (with no hash #).
      * @return The original pane modified.
@@ -129,6 +138,5 @@ public class GraphicUserInterface extends Application implements EventHandler<Ac
         ));
         return pane;
     }
-
 
 }

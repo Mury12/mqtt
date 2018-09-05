@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Subscribe;
+package com.mqtt.app.subscribe;
 
 import com.mqtt.app.Config;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -58,7 +58,7 @@ public class Subscriber {
      * This function is responsible for disconnecting the subscriber from the
      * host.
      *
-     * @return Bollean success state.
+     * @return Boolean success state.
      */
     public boolean disconnect() {
         try {

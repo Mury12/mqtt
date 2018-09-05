@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Controller;
+package com.mqtt.app.controller;
 
 import static com.mqtt.app.App.topic;
 import com.mqtt.app.Config;
-import com.mqtt.app.Services.ReplierService;
-import com.mqtt.app.Models.Publisher;
+import com.mqtt.app.services.ReplierService;
+import com.mqtt.app.models.Publisher;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -48,7 +48,7 @@ public final class PublishController {
                 System.out.println("Something went wrong.. Try again.");
             }
             int i = 0;
-            while (i < 10 && !ReplierService.got()) {
+            while (i < 5 && !ReplierService.got()) {
                 Thread.sleep(Config.getTimeout());
                 ++i;
             }

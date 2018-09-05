@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.Controller;
+package com.mqtt.app.controller;
 
-import com.mqtt.app.Models.Calculator;
-import com.mqtt.app.Models.Publisher;
+import com.mqtt.app.models.Calculator;
+import com.mqtt.app.models.Publisher;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -48,12 +48,12 @@ public class OperationController {
     public void doOperation(String payload) throws MqttException {
         String clientId = this.getClientId(payload);
         String[] arr = this.getValues(payload);
-        int reply;
+        double reply;
 
         reply = filterOperation(payload, arr);
 
-        if (callBack(Integer.toString(reply), clientId)) {
-            System.out.println("Reply sent.");
+        if (callBack(Double.toString(reply), clientId)) {
+            System.out.println("Reply sent to: " + clientId + " - " + reply + ".");
         } else {
             System.out.println("Reply failed.");
         }
@@ -67,7 +67,7 @@ public class OperationController {
      * @return Boolean for success state.
      */
     private boolean callBack(String message, String clientId) {
-        String topic = "andremury";
+        String topic = clientId;
 
         try {
             if (pub.connect()) {
@@ -90,14 +90,21 @@ public class OperationController {
      * @param arr Array of values to be processes.
      * @return the processed reply.
      */
-    private int filterOperation(String payload, String[] arr) {
-        int reply = 0;
+    private double filterOperation(String payload, String[] arr) {
+        double reply = 0;
 
         Calculator calc = new Calculator();
+        String[] values = getValues(payload);
 
-        System.out.println(payload + " op: " + getOperation(payload));
+        System.out.println(payload + " op: " + getOperation(payload) + "\t length: " + values.length + " value: " + values[0]);
         if (getOperation(payload).equalsIgnoreCase("sum")) {
-            reply = calc.sumValues(getValues(payload));
+            reply = calc.sumValues(values);
+        } else if (getOperation(payload).equalsIgnoreCase("div")) {
+            reply = calc.divideValues(values);
+        } else if (getOperation(payload).equalsIgnoreCase("mul")) {
+            reply = calc.multiplyValues(values);
+        } else if (getOperation(payload).equalsIgnoreCase("sub")) {
+            reply = calc.subtractValues(values);
         }
 
         return reply;
@@ -121,7 +128,10 @@ public class OperationController {
      * @return Array of String containing the data.
      */
     private String[] getValues(String payload) {
-        return this.unjoin(this.unjoin(this.unjoin(payload, ": ")[1], "::")[0], " ");
+
+        String v = this.unjoin(this.unjoin(payload, ": ")[1], "::")[0];
+        v = v.replaceAll("[^0-9]", " ");
+        return this.unjoin(v, " ");
     }
 
     /**
@@ -143,6 +153,12 @@ public class OperationController {
      * @return Array of String.
      */
     private String[] unjoin(String payload, String delimiter) {
+        payload = payload.trim();
+
+        while (payload.contains("  ")) {
+            payload = payload.replaceAll("  ", " ");
+        }
+
         return payload.split(delimiter);
     }
 

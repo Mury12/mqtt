@@ -1,7 +1,7 @@
 package com.mqtt.app;
 
-import com.mqtt.app.Controller.PublishController;
-import com.mqtt.app.Subscribe.Subscriber;
+import com.mqtt.app.controller.PublishController;
+import com.mqtt.app.subscribe.Subscriber;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 public class App {
