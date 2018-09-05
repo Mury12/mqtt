@@ -7,6 +7,8 @@ package com.mqtt.app.models;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.publish.ReplyGetter;
+import com.mqtt.app.services.PathCleaner;
+import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -88,9 +90,12 @@ public class Publisher {
      *
      * @return Boolean success state.
      * @throws MqttException
+     * @throws java.io.IOException
      */
-    public boolean disconnect() throws MqttException {
+    public boolean disconnect() throws MqttException, IOException {
         try {
+            PathCleaner pcl = new PathCleaner(clientId);
+            pcl.clean();
             this.client.disconnect();
             System.out.println("Client disconnected.");
             return true;

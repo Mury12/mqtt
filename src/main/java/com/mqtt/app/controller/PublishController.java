@@ -9,6 +9,7 @@ import static com.mqtt.app.App.topic;
 import com.mqtt.app.Config;
 import com.mqtt.app.services.ReplierService;
 import com.mqtt.app.models.Publisher;
+import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -17,10 +18,12 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  */
 public final class PublishController {
 
+
+
     Publisher pub;
     String values;
 
-    public PublishController(String values) throws MqttException, InterruptedException {
+    public PublishController(String values) throws MqttException, InterruptedException, IOException {
         this.values = values;
         try {
             init();
@@ -31,7 +34,7 @@ public final class PublishController {
         }
     }
 
-    public void init() throws MqttException, InterruptedException {
+    public void init() throws MqttException, InterruptedException, IOException {
         try {
             this.pub = new Publisher();
         } catch (MqttException e) {
@@ -55,5 +58,4 @@ public final class PublishController {
             pub.disconnect();
         }
     }
-
 }

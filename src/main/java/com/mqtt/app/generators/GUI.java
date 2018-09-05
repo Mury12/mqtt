@@ -1,7 +1,9 @@
 package com.mqtt.app.generators;
 
 import com.mqtt.app.App;
+import com.mqtt.app.services.PathCleaner;
 import com.mqtt.app.states.PublishingState;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
@@ -47,7 +49,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     }
 
     @Override
-    public void stop(){
+    public void stop() throws IOException{
         System.exit(0);
     }
     private Scene getStage() {
