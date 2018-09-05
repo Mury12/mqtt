@@ -7,8 +7,6 @@ package com.mqtt.app.controller;
 
 import com.mqtt.app.models.Calculator;
 import com.mqtt.app.models.Publisher;
-import com.mqtt.app.services.PathCleaner;
-import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -30,7 +28,7 @@ public class OperationController {
      *
      * @throws MqttException
      */
-    public void init() throws MqttException, IOException {
+    public void init() throws MqttException {
         try {
             pub = new Publisher();
         } catch (MqttException e) {
@@ -48,7 +46,7 @@ public class OperationController {
      * @throws MqttException
      * @throws java.io.IOException
      */
-    public void doOperation(String payload) throws MqttException, IOException {
+    public void doOperation(String payload) throws MqttException {
         String clientId = this.getClientId(payload);
         String[] arr = this.getValues(payload);
         double reply;
@@ -69,14 +67,12 @@ public class OperationController {
      * @param clientId String containing the client ID to sent the message.
      * @return Boolean for success state.
      */
-    private boolean callBack(String message, String clientId) throws IOException {
+    private boolean callBack(String message, String clientId) {
         String topic = clientId;
 
         try {
             if (pub.connect()) {
                 this.pub.publish(message, topic);
-                PathCleaner pcl = new PathCleaner(clientId);
-                pcl.clean();
                 pub.disconnect();
                 return true;
             }

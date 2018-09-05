@@ -6,8 +6,6 @@
 package com.mqtt.app.subscribe;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.services.PathCleaner;
-import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -43,14 +41,11 @@ public class Subscriber {
      * @param topic
      * @return success state boolean
      * @throws MqttException
-     * @throws java.io.IOException
      */
-    public static boolean connect(String topic) throws MqttException, IOException {
+    public static boolean connect(String topic) throws MqttException {
         try {
             client.setCallback(new SubscriberCallback());
             client.connect();
-            PathCleaner pcl = new PathCleaner("paho*");
-            pcl.clean();
             System.out.println("Subscribed to topic " + topic + ".");
             client.subscribe(topic);
             return true;
