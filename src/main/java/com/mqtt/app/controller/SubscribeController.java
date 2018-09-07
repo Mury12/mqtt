@@ -17,18 +17,18 @@ public class SubscribeController {
 
     String repĺy;
     String currMessage;
-    String arg = new String();
     Subscriber sub;
 
-    public SubscribeController(String args) throws MqttException {
+    public SubscribeController() throws MqttException {
+        sub = new Subscriber();
         this.repĺy = new String();
         this.currMessage = new String();
-        this.arg = args;
     }
 
-    public void init() throws MqttException {
+    public void init(String args) throws MqttException {
+        
         try {
-            doOperation(this.arg);
+            doOperation(args);
         } catch (MqttException e) {
             System.out.println(e);
         }
@@ -36,25 +36,24 @@ public class SubscribeController {
 
     private void doOperation(String op) throws MqttException {
         String topic = Config.getTopic();
-        sub = new Subscriber();
         if (op.equals("in")) {
             System.out.println("You are subscribing to \"" + topic + "\".");
-            
+
             if (this.sub.connect(topic)) {
                 System.out.println("Messages arrived: ");
                 setRepĺy("Connected. Last reply:");
-                
+
             }
-        }else if(op.equals("out")){
+        } else if (op.equals("out")) {
             System.out.println("You are disconnecting.");
-            if(!sub.disconnect()){
-                setRepĺy("Your are disconnected.");
-            }else{
+            if (!sub.disconnect()) {
                 setRepĺy("Something went wrong, try again.");
+            } else {
+                setRepĺy("Your are disconnected.");
             }
         }
     }
-    
+
     public String getRepĺy() {
         return repĺy;
     }

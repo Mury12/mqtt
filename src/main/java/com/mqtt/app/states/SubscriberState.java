@@ -33,6 +33,7 @@ public class SubscriberState implements StateInterface {
     Label stat = new Label("Connect to start receiving messages.");
     static Label reply = new Label("...");
     String op = new String();
+    SubscribeController stc;
 
     public TilePane getState() {
         TilePane layout = new TilePane();
@@ -40,14 +41,19 @@ public class SubscriberState implements StateInterface {
     }
 
     public TilePane setModule(TilePane pane) {
-        pane.getChildren().clear();
-        pane.setPrefSize(
-                GuiSettings.getWidth(),
-                GuiSettings.getHeight()
-        );
-
-        pane = setTile(pane);
-        return pane;
+        try {
+            stc = new SubscribeController();
+            pane.getChildren().clear();
+            pane.setPrefSize(
+                    GuiSettings.getWidth(),
+                    GuiSettings.getHeight()
+            );
+            
+            pane = setTile(pane);
+        } catch (MqttException ex) {
+            Logger.getLogger(SubscriberState.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            return pane;
     }
 
     public TilePane addButtons(TilePane pane) {
@@ -57,6 +63,11 @@ public class SubscriberState implements StateInterface {
 
         back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent event) {
+                try {
+                    stc.init("out");
+                } catch (MqttException ex) {
+                    Logger.getLogger(SubscriberState.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 GUI.getMenu();
             }
         });
@@ -69,13 +80,13 @@ public class SubscriberState implements StateInterface {
 
     public TilePane setTopPane(TilePane pane) {
         TilePane top = new TilePane();
-        
+
         top.setOrientation(Orientation.HORIZONTAL);
-        
+
         top.setPrefWidth(
                 GuiSettings.getWidth()
         );
-        
+
         top.setPrefTileHeight(GuiSettings.getTileHeight(2));
         top.setAlignment(Pos.CENTER);
         top = addButtons(top);
@@ -112,20 +123,18 @@ public class SubscriberState implements StateInterface {
         button.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent t) {
                 try {
-                    SubscribeController stc = new SubscribeController(operation);
-                    stc.init();
-
-                    stat.setText(stc.getRepĺy());
+                    stc.init(operation);
                 } catch (MqttException ex) {
                     Logger.getLogger(SubscriberState.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                stat.setText(stc.getRepĺy());
             }
         });
         return button;
     }
 
-    public static void setReply(){
+    public static void setReply() {
         reply.setText(ReplierService.getReply());
     }
-    
+
 }

@@ -63,6 +63,7 @@ public class Subscriber {
      */
     public boolean disconnect() {
         try {
+            client.unsubscribe(Config.getTopic());
             client.disconnect();
             return true;
         } catch (MqttException e) {

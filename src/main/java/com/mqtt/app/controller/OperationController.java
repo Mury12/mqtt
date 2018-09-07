@@ -56,7 +56,7 @@ public class OperationController {
         reply = filterOperation(payload, arr);
 
         if (callBack(Double.toString(reply), clientId)) {
-            ReplierService.setReply("Reply sent to: " + clientId + " - " + reply + ".");
+            ReplierService.setReply("Reply sent to: " + clientId + " :: " + reply + ".");
         } else {
             ReplierService.setReply("Reply failed.");
         }

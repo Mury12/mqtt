@@ -92,7 +92,6 @@ public class Publisher {
     public boolean disconnect() throws MqttException {
         try {
             this.client.disconnect();
-            System.out.println("Client disconnected.");
             return true;
         } catch (MqttException e) {
             System.out.println(e);
