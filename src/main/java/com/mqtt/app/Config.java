@@ -12,6 +12,10 @@ public class Config {
      */
     private static final String DEFAULT_TOPIC = "iot_data";
     /**
+     * @var DEFAULT_REPLY_TOPIC It's the default topic for replying.
+     */
+    private static final String DEFAULT_REPLY_TOPIC = "andremury";
+    /**
      * @var DEFAULT_TIMEOUT It's the default timeout for waiting and other
      * processes.
      */
@@ -28,6 +32,10 @@ public class Config {
      * @var DEFAULT_PORT It's the default Mosquitto Broker port.
      */
     private static final String DEFAULT_PORT = "1883";
+    /**
+     * @var reply_topic This is the current replying topic.
+     */
+    private static String reply_topic  = DEFAULT_REPLY_TOPIC;
     /**
      * @var topic This is the current topic setting.
      */
@@ -137,6 +145,13 @@ public class Config {
      */
     public static void setTopic(String topic) {
         Config.topic = topic;
+    }
+    
+    public static void restoreDefaults(){
+        setConnProtocol(DEFAULT_PROTOCOL);
+        setHost(DEFAULT_HOST);
+        setPort(DEFAULT_PORT);
+        setTopic(DEFAULT_TOPIC);
     }
 
 }
