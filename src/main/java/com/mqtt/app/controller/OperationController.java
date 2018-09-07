@@ -7,6 +7,9 @@ package com.mqtt.app.controller;
 
 import com.mqtt.app.models.Calculator;
 import com.mqtt.app.models.Publisher;
+import com.mqtt.app.services.ReplierService;
+import com.mqtt.app.states.SubscriberState;
+import javafx.application.Platform;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -44,7 +47,6 @@ public class OperationController {
      *
      * @param payload String [option, [value1,[value2,[...]]]] Ex.: add 2 1 4 3
      * @throws MqttException
-     * @throws java.io.IOException
      */
     public void doOperation(String payload) throws MqttException {
         String clientId = this.getClientId(payload);
@@ -54,10 +56,16 @@ public class OperationController {
         reply = filterOperation(payload, arr);
 
         if (callBack(Double.toString(reply), clientId)) {
-            System.out.println("Reply sent to: " + clientId + " - " + reply + ".");
+            ReplierService.setReply("Reply sent to: " + clientId + " - " + reply + ".");
         } else {
-            System.out.println("Reply failed.");
+            ReplierService.setReply("Reply failed.");
         }
+        System.out.println(ReplierService.getReply());
+        Platform.runLater(new Runnable() {
+            public void run() {
+                SubscriberState.setReply();
+            }
+        });
     }
 
     /**

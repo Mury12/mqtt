@@ -19,7 +19,7 @@ public class App {
             PublishController pub = new PublishController(args);
         }
         if (op.equalsIgnoreCase("subscriber") || op.equalsIgnoreCase("subscribe") || op.equalsIgnoreCase("sub")) {
-            System.out.println("You are subscribing.");
+            System.out.println("You are subscribing to \""+ topic +"\".");
 
             sub = new Subscriber();
             if (sub.connect(topic)) {

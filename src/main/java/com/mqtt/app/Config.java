@@ -146,5 +146,12 @@ public class Config {
     public static void setTopic(String topic) {
         Config.topic = topic;
     }
+    
+    public static void restoreDefaults(){
+        setConnProtocol(DEFAULT_PROTOCOL);
+        setHost(DEFAULT_HOST);
+        setPort(DEFAULT_PORT);
+        setTopic(DEFAULT_TOPIC);
+    }
 
 }
