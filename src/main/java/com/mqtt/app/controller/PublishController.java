@@ -5,7 +5,6 @@
  */
 package com.mqtt.app.controller;
 
-import static com.mqtt.app.App.topic;
 import com.mqtt.app.Config;
 import com.mqtt.app.services.ReplierService;
 import com.mqtt.app.models.Publisher;
@@ -21,7 +20,7 @@ public final class PublishController {
 
     Publisher pub;
     String values;
-
+    String topic = Config.getTopic();
     public PublishController(String values) throws MqttException, InterruptedException {
         this.values = values;
         try {
@@ -45,7 +44,7 @@ public final class PublishController {
             Publisher.getReply();
 
             if (pub.publish(this.values, topic)) {
-                System.out.println("Message sent.");
+                System.out.println("Message sent to \""+topic+"\".");
             } else {
                 System.out.println("Something went wrong.. Try again.");
             }

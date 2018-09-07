@@ -1,18 +1,12 @@
 package com.mqtt.app.generators;
 
 import com.mqtt.app.App;
-import com.mqtt.app.states.PublishingState;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.mqtt.app.states.MenuState;
+import com.mqtt.app.states.SettingsState;
+import com.mqtt.app.states.SubscriberState;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -22,13 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class GUI extends Application implements EventHandler<ActionEvent> {
+public class GUI extends Application {
 
-    boolean publish = false,
-            subscribe = false;
-
-    public Scene root;
-    Label reply = new Label();
+    static TilePane layout = new TilePane();
 
     public GUI() {
 
@@ -40,66 +30,26 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 
     @Override
     public void start(Stage stage) throws Exception {
-        stage.setTitle("MQTT Applicaton Example");
-        root = setInitialStage();
-        stage.setScene(root);
+        getMenu();
+        
+        stage.setTitle("MQTT Applicaton");
+        stage.setScene(new Scene(layout,
+                GuiSettings.getWidth(),
+                GuiSettings.getHeight())
+        );
+        
         stage.show();
     }
 
     @Override
-    public void stop(){
+    public void stop() {
         System.exit(0);
     }
+
     private Scene getStage() {
         StackPane l = new StackPane();
         Scene s = new Scene(l);
         return s;
-    }
-
-    /**
-     * Defines an initial pane.
-     *
-     * @return the scene.
-     */
-    private Scene setInitialStage() {
-        final TilePane layout = new TilePane();
-        TilePane left = new TilePane();
-        final TilePane right = new TilePane();
-        final Button pub = new Button("Publisher");
-        final Button sub = new Button("Subscriber");
-
-        left.setOrientation(Orientation.VERTICAL);
-        left.setPrefTileHeight(50);
-        left.setPrefTileWidth(500);
-        left = fillBackground(left, "c7c7c7");
-        left.getChildren().addAll(pub, sub);
-
-        layout.setOrientation(Orientation.VERTICAL);
-        layout.getChildren().addAll(left, right);
-
-        pub.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent t) {
-                publish = true;
-                PublishingState pubs = new PublishingState();
-                pubs.setPublisherModule(layout);
-            }
-
-        });
-        sub.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent t) {
-                subscribe = true;
-                try {
-                    App app = new App();
-                    app.init("sub", "");
-                } catch (MqttException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
-        });
-
-        return new Scene(layout, 500, 100);
     }
 
     /**
@@ -113,12 +63,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     private void initApp(String option, String args) throws MqttException, InterruptedException {
         App a = new App();
         a.init(option, args);
-    }
-
-    public void handle(ActionEvent t) {
-        if (publish || subscribe) {
-            System.out.println("dec");
-        }
     }
 
     /**
@@ -139,4 +83,22 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
         return pane;
     }
 
+    public static void getMenu() {
+        clear();
+        layout.getChildren().addAll(new MenuState().getMenuState());
+    }
+
+    public static void getSettings() {
+        clear();
+        layout.getChildren().addAll(new SettingsState().getState());
+    }
+
+    public static void getSubscriber(){
+        clear();
+        layout.getChildren().addAll(new SubscriberState().getState());
+    }
+    
+    public static void clear() {
+        layout.getChildren().clear();
+    }
 }
