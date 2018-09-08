@@ -18,12 +18,10 @@ public class Publisher {
     public static void main(String[] args) throws MqttException {
         MqttClient c = new MqttClient("tcp://localhost:1883", MqttClient.generateClientId());
         MqttMessage mqs = new MqttMessage();
-        String msg;
         Scanner s = new Scanner(System.in);
         c.connect();
         System.out.println("Digite uma mensagem: ");
-        msg = s.nextLine();
-        mqs.setPayload(msg.getBytes());
+        mqs.setPayload(s.nextLine().getBytes());
         c.publish("iot_data", mqs);
         c.disconnect();
     }
