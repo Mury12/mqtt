@@ -31,10 +31,6 @@ public class SettingsState implements StateInterface {
     Label reply = new Label("Type an IP then change it.");
     String op = new String();
 
-    /**
-     * This function is responsible for getting the state contained.
-     * @return 
-     */
     public TilePane getState() {
         TilePane layout = new TilePane();
         return setModule(layout);
