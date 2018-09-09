@@ -1,19 +1,17 @@
 package com.mqtt.app;
 
+import com.mqtt.app.Publish.ReplyGetter;
+import com.mqtt.app.Subscribe.Subscriber;
+import com.mqtt.app.states.Publisher;
 import java.util.Scanner;
-import javafx.scene.web.PromptData;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-/**
- * Hello world!
- *
- */
 public class App {
-
     public static Publisher pub;
     public static Subscriber sub;
+    public static String topic = Config.getTopic();
 
-    public static void main(String[] args) throws MqttException {
+    public static void main(String[] args) throws MqttException, InterruptedException {
         String op;
         Scanner s = new Scanner(System.in);
         System.out.println("Welcolme to the MQTT Server-client Project!");
@@ -23,33 +21,37 @@ public class App {
 
         if (op.equalsIgnoreCase("publisher") || op.equalsIgnoreCase("publish") || op.equalsIgnoreCase("pub")) {
             pub = new Publisher();
+            s.nextLine();
             if (pub.connect()) {
-                String str = new String();
                 while (true) {
+                    String str = new String();
+                    Thread.sleep(Config.getTimeout());
+
                     System.out.println("What do you want to send?");
-                    str = s.next();
-                    
+                    str = s.nextLine();
+                    Publisher.getReply();
+
                     if (str.equalsIgnoreCase("exit") || str.equalsIgnoreCase("quit")) {
-                        System.out.println("Program exiting. Farewell");
+                        System.out.println("Program exiting. Farewell!");
                         pub.disconnect();
+                        return;
                     }
-                    
-                    if(pub.publish(str)){
+
+                    if (pub.publish(str, topic)) {
                         System.out.println("Message sent.");
-                    }else{
+                    } else {
                         System.out.println("Something went wrong.. Try again.");
-                        continue;
-                    }                    
+                    }
                 }
             }
+
         }
-        if(op.equalsIgnoreCase("subscriber") || op.equalsIgnoreCase("subscribe") || op.equalsIgnoreCase("sub")){
+        if (op.equalsIgnoreCase("subscriber") || op.equalsIgnoreCase("subscribe") || op.equalsIgnoreCase("sub")) {
             sub = new Subscriber();
-            if(sub.connect()){
+            if (sub.connect(topic)) {
                 System.out.println("Messages arrived: ");
             }
         }
 
     }
-
 }
