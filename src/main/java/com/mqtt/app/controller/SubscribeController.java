@@ -29,7 +29,7 @@ public class SubscribeController {
      * This function is responsible for initiating the Subscribe Controller.
      * @throws MqttException 
      */
-    public void init() throws MqttException {
+    public void init(String args) throws MqttException {
         try {
             doOperation(args);
         } catch (MqttException e) {
