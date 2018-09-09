@@ -24,6 +24,12 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * This function is responsible for launching the Graphic User Interface
+     * system.
+     *
+     * @param args
+     */
     public static void go(String[] args) {
         launch(args);
     }
@@ -31,13 +37,13 @@ public class GUI extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         getMenu();
-        
+
         stage.setTitle("MQTT Applicaton");
         stage.setScene(new Scene(layout,
                 GuiSettings.getWidth(),
                 GuiSettings.getHeight())
         );
-        
+
         stage.show();
     }
 
@@ -83,21 +89,33 @@ public class GUI extends Application {
         return pane;
     }
 
+    /**
+     * This function is responsible for showing the Menu state of the system.
+     */
     public static void getMenu() {
         clear();
         layout.getChildren().addAll(new MenuState().getMenuState());
     }
 
+    /**
+     * This function is responsible for showing the Settings state of the system.
+     */
     public static void getSettings() {
         clear();
         layout.getChildren().addAll(new SettingsState().getState());
     }
 
-    public static void getSubscriber(){
+    /**
+     * This function is responsible for showing the Subscriber state of the system.
+     */
+    public static void getSubscriber() {
         clear();
         layout.getChildren().addAll(new SubscriberState().getState());
     }
-    
+
+    /**
+     * This function is responsible for clearing the main GUI pane.
+     */
     public static void clear() {
         layout.getChildren().clear();
     }

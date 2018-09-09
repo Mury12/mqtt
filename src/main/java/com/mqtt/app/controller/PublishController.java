@@ -21,6 +21,7 @@ public final class PublishController {
     Publisher pub;
     String values;
     String topic = Config.getTopic();
+    
     public PublishController(String values) throws MqttException, InterruptedException {
         this.values = values;
         try {
@@ -32,6 +33,11 @@ public final class PublishController {
         }
     }
 
+    /**
+     * This function is responsible for initiating the Publisher Controller
+     * @throws MqttException
+     * @throws InterruptedException 
+     */
     public void init() throws MqttException, InterruptedException {
         try {
             this.pub = new Publisher();

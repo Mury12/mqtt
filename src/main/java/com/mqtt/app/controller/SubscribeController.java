@@ -26,6 +26,10 @@ public class SubscribeController {
         this.arg = args;
     }
 
+    /**
+     * This function is responsible for initiating the Subscribe Controller.
+     * @throws MqttException 
+     */
     public void init() throws MqttException {
         try {
             doOperation(this.arg);
@@ -34,31 +38,44 @@ public class SubscribeController {
         }
     }
 
+    /**
+     * Filter and route the operation wanted.
+     *
+     * @param op the operation
+     * @throws MqttException
+     */
     private void doOperation(String op) throws MqttException {
         String topic = Config.getTopic();
         sub = new Subscriber();
         if (op.equals("in")) {
             System.out.println("You are subscribing to \"" + topic + "\".");
-            
+
             if (this.sub.connect(topic)) {
                 System.out.println("Messages arrived: ");
                 setRepĺy("Connected. Last reply:");
-                
+
             }
-        }else if(op.equals("out")){
+        } else if (op.equals("out")) {
             System.out.println("You are disconnecting.");
-            if(!sub.disconnect()){
+            if (!sub.disconnect()) {
                 setRepĺy("Your are disconnected.");
-            }else{
+            } else {
                 setRepĺy("Something went wrong, try again.");
             }
         }
     }
-    
+    /**
+     * Gets the reply set by this class.
+     * @return String reply.
+     */
     public String getRepĺy() {
         return repĺy;
     }
 
+    /**
+     * Sets the reply for this class.
+     * @param repĺy String with a message reply.
+     */
     public void setRepĺy(String repĺy) {
         this.repĺy = repĺy;
     }
