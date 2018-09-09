@@ -17,13 +17,12 @@ public class SubscribeController {
 
     String repĺy;
     String currMessage;
-    String arg = new String();
     Subscriber sub;
 
-    public SubscribeController(String args) throws MqttException {
+    public SubscribeController() throws MqttException {
+        sub = new Subscriber();
         this.repĺy = new String();
         this.currMessage = new String();
-        this.arg = args;
     }
 
     /**
@@ -32,7 +31,7 @@ public class SubscribeController {
      */
     public void init() throws MqttException {
         try {
-            doOperation(this.arg);
+            doOperation(args);
         } catch (MqttException e) {
             System.out.println(e);
         }
@@ -46,7 +45,6 @@ public class SubscribeController {
      */
     private void doOperation(String op) throws MqttException {
         String topic = Config.getTopic();
-        sub = new Subscriber();
         if (op.equals("in")) {
             System.out.println("You are subscribing to \"" + topic + "\".");
 
