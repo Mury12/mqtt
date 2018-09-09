@@ -1,7 +1,7 @@
 # Especificão de versões:
-- Branch `dev`
+- Branch `master`
 Contém uma versão mais simples, executada em terminal da aplicação, com os dois módulos.
-- Branch `gui`
+- Branch `dev`
 Contém uma versão com interface gráfica da aplicação com os dois módulos + configurações.
 - Branch `simplest`
 Contém a versão mais simples possível da aplicação, com os dois módulos, executada em terminal.
