@@ -21,15 +21,9 @@
             <version>1.2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11-ea+19</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.eclipse.paho</groupId>
-            <artifactId>org.eclipse.paho.mqtt.utility</artifactId>
-            <version>1.1.1</version>
+            <artifactId>mqtt-client</artifactId>
+            <version>0.4.0</version>
         </dependency>
     </dependencies>
     <build>
@@ -46,18 +40,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <filters>
-                        <filter>
-                            <artifact>*:*</artifact>
-                            <excludes>
-                                <exclude>META-INF/*.SF</exclude>
-                                <exclude>META-INF/*.DSA</exclude>
-                                <exclude>META-INF/*.RSA</exclude>
-                            </excludes>
-                        </filter>
-                    </filters>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -67,7 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.mqtt.app.Start</mainClass>
+                            <mainClass>com.mqtt.app.App</mainClass>
                             <addClasspath>true</addClasspath>
                         </manifest>
                     </archive>
@@ -78,8 +60,8 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.mqtt.app.Start</mainClass>
+                            <mainClass>com.mqtt.app.App</mainClass>
+
                         </manifest>
                     </archive>
                     <descriptorRefs>

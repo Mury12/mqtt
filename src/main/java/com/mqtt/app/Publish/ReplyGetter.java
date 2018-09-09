@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.publish;
+package com.mqtt.app.Publish;
 
 import com.mqtt.app.Config;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -92,5 +92,4 @@ public class ReplyGetter {
         }
         return false;
     }
-    
 }

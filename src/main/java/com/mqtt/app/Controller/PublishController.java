@@ -3,18 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app;
-
-import com.mqtt.app.generators.GUI;
+package com.mqtt.app.Controller;
 
 /**
  *
  * @author andremury
  */
-public class Start{
-    public static void main(String[] args) {
-        GUI.go(args);
-    }
-
-
+public class PublishController {
+    
 }
