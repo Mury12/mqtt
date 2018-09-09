@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mqtt.app.states;
+package com.mqtt.app.models;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.Publish.ReplyGetter;
+import com.mqtt.app.publish.ReplyGetter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -32,7 +32,7 @@ public class Publisher {
     /**
      * T@var clientId This is the client ID tha will be generated later.
      */
-    private String clientId;
+    private static String clientId;
 
     /**
      * This is the class constructor that will initialize every dependency and
@@ -57,7 +57,7 @@ public class Publisher {
      */
     public boolean publish(String message, String topic) throws MqttException {
         try {
-            msg.setPayload((this.clientId + ": " + message).getBytes());
+            msg.setPayload((clientId + ": " + message).getBytes());
             client.publish(topic, this.msg);
             return true;
         } catch (MqttException e) {
@@ -92,7 +92,6 @@ public class Publisher {
     public boolean disconnect() throws MqttException {
         try {
             this.client.disconnect();
-            System.out.println("Client disconnected.");
             return true;
         } catch (MqttException e) {
             System.out.println(e);
@@ -110,10 +109,7 @@ public class Publisher {
      */
     public static boolean getReply() throws MqttException, InterruptedException {
         ReplyGetter psub = new ReplyGetter();
-        if (psub.connect("andremury")) {
-            return true;
-        }
-        return false;
+        return psub.connect(clientId);
     }
 
 }
