@@ -1,3 +1,5 @@
+# Versão
+Este ramo contém a versão mais básica e simples da aplicação.
 # Utilização do Git
 
 - Instalar Git
