@@ -6,7 +6,6 @@
 package com.mqtt.app.controller;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.services.ReplierService;
 import com.mqtt.app.models.Publisher;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -20,10 +19,11 @@ public final class PublishController {
 
     Publisher pub;
     String values;
-    String topic = Config.getTopic();
+    String topic;
     
-    public PublishController(String values) throws MqttException, InterruptedException {
+    public PublishController(String values, String topic) throws MqttException, InterruptedException {
         this.values = values;
+        this.topic = Config.getTopic()+"/"+topic;
         try {
             init();
         } catch (InterruptedException e) {
@@ -47,17 +47,11 @@ public final class PublishController {
 
         if (pub.connect()) {
 
-            Publisher.getReply();
 
             if (pub.publish(this.values, topic)) {
                 System.out.println("Message sent to \""+topic+"\".");
             } else {
                 System.out.println("Something went wrong.. Try again.");
-            }
-            int i = 0;
-            while (i < 5 && !ReplierService.got()) {
-                Thread.sleep(Config.getTimeout());
-                ++i;
             }
             pub.disconnect();
         }

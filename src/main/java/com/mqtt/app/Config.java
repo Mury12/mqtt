@@ -10,7 +10,7 @@ public class Config {
     /**
      * @var DEFAULT_TOPIC It's the default topic for subscription.
      */
-    private static final String DEFAULT_TOPIC = "sensor/#";
+    private static final String DEFAULT_TOPIC = "sensor";
     /**
      * @var DEFAULT_REPLY_TOPIC It's the default topic for replying.
      */
@@ -57,6 +57,9 @@ public class Config {
      */
     private static int timeout = DEFAULT_TIMEOUT;
 
+    private static String machineName = null;
+    
+    private static String location = null;
     /**
      * This function returns the protocol type for connection.
      *
@@ -153,5 +156,23 @@ public class Config {
         setPort(DEFAULT_PORT);
         setTopic(DEFAULT_TOPIC);
     }
+
+    public static void setLocation(String location) {
+        Config.location = location;
+    }
+
+    public static void setMachineName(String machineName) {
+        Config.machineName = machineName;
+    }
+
+    public static String getLocation() {
+        return location;
+    }
+
+    public static String getMachineName() {
+        return machineName;
+    }
+    
+    
 
 }

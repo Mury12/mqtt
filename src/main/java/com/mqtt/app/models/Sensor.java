@@ -9,7 +9,6 @@ import com.profesorfalken.jsensors.JSensors;
 import com.profesorfalken.jsensors.model.components.Components;
 import com.profesorfalken.jsensors.model.components.Cpu;
 import com.profesorfalken.jsensors.model.sensors.Fan;
-import com.profesorfalken.jsensors.model.sensors.Temperature;
 import java.util.List;
 
 /**
@@ -32,7 +31,7 @@ public class Sensor {
     public double getCpuTemp() {
 
         if(cpus.get(0).sensors != null){
-            return cpus.get(0).sensors.temperatures.get(1).value;
+            return cpus.get(0).sensors.temperatures.get(0).value;
         }
         return 0;
     }

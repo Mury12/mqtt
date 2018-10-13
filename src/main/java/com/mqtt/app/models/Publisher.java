@@ -6,7 +6,6 @@
 package com.mqtt.app.models;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.publish.ReplyGetter;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -42,7 +41,7 @@ public class Publisher {
      */
     public Publisher() throws MqttException {
         serverURI = Config.getFullURI();
-        clientId = MqttClient.generateClientId();
+        clientId = Config.getLocation()+":"+Config.getMachineName();
         this.client = new MqttClient(serverURI, clientId);
         this.msg = new MqttMessage();
     }
@@ -99,17 +98,5 @@ public class Publisher {
         return false;
     }
 
-    /**
-     * This function is responsible for getting a reply from a specific unique
-     * client-server topic.
-     *
-     * @return Boolean success state.
-     * @throws MqttException
-     * @throws InterruptedException
-     */
-    public static boolean getReply() throws MqttException, InterruptedException {
-        ReplyGetter psub = new ReplyGetter();
-        return psub.connect(clientId);
-    }
 
 }

@@ -5,7 +5,6 @@
  */
 package com.mqtt.app.publish;
 
-import com.mqtt.app.services.ReplierService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -39,8 +38,6 @@ public class PublisherCallback implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
         System.out.println("Reply: " + unjoin(string, ": ")[1] + ".");
-        ReplierService.setReply("Reply: " + unjoin(string, ": ")[1]);
-        ReplyGetter.unsubscribe();
     }
 
     /**
