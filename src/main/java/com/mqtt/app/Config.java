@@ -10,7 +10,7 @@ public class Config {
     /**
      * @var DEFAULT_TOPIC It's the default topic for subscription.
      */
-    private static final String DEFAULT_TOPIC = "iot_data";
+    private static final String DEFAULT_TOPIC = "sensor/#";
     /**
      * @var DEFAULT_REPLY_TOPIC It's the default topic for replying.
      */
@@ -27,7 +27,7 @@ public class Config {
     /**
      * @var DEFAULT_HOST It's the default host for message sending.
      */
-    private static final String DEFAULT_HOST = "themayhem.ddns.net";
+    private static final String DEFAULT_HOST = "sensordata.ddns.net";
     /**
      * @var DEFAULT_PORT It's the default Mosquitto Broker port.
      */
