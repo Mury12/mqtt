@@ -4,3 +4,4 @@ build.xml
 /target/
 andremury*
 paho*
+/dashboard/nbproject/private/

@@ -20,11 +20,6 @@
             <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
             <version>1.2.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11-ea+19</version>
-        </dependency>
 
         <dependency>
             <groupId>org.eclipse.paho</groupId>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<SplitPane dividerPositions="0.29797979797979796" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="687.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Button layoutX="36.0" layoutY="34.0" mnemonicParsing="false" text="Add Subscription" />
+            <Button layoutX="69.0" layoutY="83.0" mnemonicParsing="false" text="Change Broker" />
+            <Button layoutX="70.0" layoutY="131.0" mnemonicParsing="false" text="Button" />
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <Accordion layoutX="89.0" layoutY="77.0" />
+          <TitledPane animated="false" layoutX="-3.0" prefHeight="528.0" prefWidth="486.0" text="LAB">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView prefHeight="497.0" prefWidth="477.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+         </children></AnchorPane>
+  </items>
+</SplitPane>
