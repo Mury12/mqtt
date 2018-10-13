@@ -21,14 +21,15 @@ public class Sensor {
     List<Cpu> cpus;
 
     public Sensor() {
-        if (cpus == null) {
-            System.exit(1);
-        }
+
     }
 
     public double getCpuTemp() {
         components = JSensors.get.components();
         cpus = components.cpus;
+        if (cpus == null) {
+            System.exit(1);
+        }
         if (cpus.get(0).sensors != null) {
             return cpus.get(0).sensors.temperatures.get(0).value;
         }
@@ -38,6 +39,9 @@ public class Sensor {
     public void getCpuFan() {
         components = JSensors.get.components();
         cpus = components.cpus;
+        if (cpus == null) {
+            System.exit(1);
+        }
         for (final Cpu cpu : cpus) {
             if (cpu.sensors != null) {
                 //Print fan speed
