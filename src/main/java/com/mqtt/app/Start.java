@@ -1,6 +1,7 @@
 package com.mqtt.app;
 
-import com.mqtt.app.generators.GUI;
+import com.mqtt.app.controller.SubscribeController;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -8,8 +9,11 @@ import com.mqtt.app.generators.GUI;
  */
 public class Start {
 
-    public static void main(String[] args) throws InterruptedException {
-        GUI.go(args);
-}
+     static SubscribeController sc;
+
+    public static void main(String[] args) throws InterruptedException, MqttException {
+        sc = new SubscribeController();
+        sc.connect();
+    }
 
 }

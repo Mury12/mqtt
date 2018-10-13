@@ -6,7 +6,7 @@
 package com.mqtt.app.subscribe;
 
 import com.mqtt.app.Config;
-import com.mqtt.app.controller.OperationController;
+import com.mqtt.app.services.ReplierService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -46,8 +46,7 @@ public class SubscriberCallback implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
         System.out.println(string);
-        OperationController opc = new OperationController(string);
-        opc.init();
+        ReplierService.setReply(string);
     }
 
     /**
