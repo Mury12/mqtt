@@ -21,12 +21,6 @@
             <version>1.2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-graphics</artifactId>
-            <version>11-ea+19</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.eclipse.paho</groupId>
             <artifactId>org.eclipse.paho.mqtt.utility</artifactId>
             <version>1.1.1</version>
