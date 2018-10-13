@@ -5,8 +5,6 @@
  */
 package com.mqtt.app.states;
 
-import com.mqtt.app.Config;
-import com.mqtt.app.controller.SettingsController;
 import com.mqtt.app.controller.SubscribeController;
 import com.mqtt.app.generators.GUI;
 import com.mqtt.app.generators.GuiSettings;
@@ -19,7 +17,6 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import org.eclipse.paho.client.mqttv3.MqttException;

@@ -5,7 +5,6 @@
  */
 package com.mqtt.app.controller;
 
-import com.mqtt.app.models.Calculator;
 import com.mqtt.app.models.Publisher;
 import com.mqtt.app.services.ReplierService;
 import com.mqtt.app.states.SubscriberState;
@@ -51,15 +50,12 @@ public class OperationController {
     public void doOperation(String payload) throws MqttException {
         String clientId = this.getClientId(payload);
         String[] arr = this.getValues(payload);
-        double reply;
+        String reply;
 
-        reply = filterOperation(payload, arr);
+        reply = payload;
 
-        if (callBack(Double.toString(reply), clientId)) {
-            ReplierService.setReply("Reply sent to: " + clientId + " :: " + reply + ".");
-        } else {
-            ReplierService.setReply("Reply failed.");
-        }
+            ReplierService.setReply("Last Message: "+ reply + ".");
+
         System.out.println(ReplierService.getReply());
         Platform.runLater(new Runnable() {
             public void run() {
@@ -67,29 +63,6 @@ public class OperationController {
             }
         });
     }
-
-    /**
-     * This function makes a callback to the publisher with a processed data.
-     *
-     * @param message String containing the message to the publisher.
-     * @param clientId String containing the client ID to sent the message.
-     * @return Boolean for success state.
-     */
-    private boolean callBack(String message, String clientId) {
-        String topic = clientId;
-
-        try {
-            if (pub.connect()) {
-                this.pub.publish(message, topic);
-                pub.disconnect();
-                return true;
-            }
-        } catch (MqttException e) {
-            System.out.println(e);
-        }
-        return false;
-    }
-
     /**
      * This function is responsible for routing operations. This means that the
      * values passed on @getValues() will be sent to the @getOperation method
@@ -102,19 +75,7 @@ public class OperationController {
     private double filterOperation(String payload, String[] arr) {
         double reply = 0;
 
-        Calculator calc = new Calculator();
         String[] values = getValues(payload);
-
-        System.out.println(payload + " op: " + getOperation(payload) + "\t length: " + values.length + " value: " + values[0]);
-        if (getOperation(payload).equalsIgnoreCase("sum")) {
-            reply = calc.sumValues(values);
-        } else if (getOperation(payload).equalsIgnoreCase("div")) {
-            reply = calc.divideValues(values);
-        } else if (getOperation(payload).equalsIgnoreCase("mul")) {
-            reply = calc.multiplyValues(values);
-        } else if (getOperation(payload).equalsIgnoreCase("sub")) {
-            reply = calc.subtractValues(values);
-        }
 
         return reply;
     }

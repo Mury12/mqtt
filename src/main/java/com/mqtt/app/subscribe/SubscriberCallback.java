@@ -45,9 +45,9 @@ public class SubscriberCallback implements MqttCallback {
      */
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
+        System.out.println(string);
         OperationController opc = new OperationController(string);
         opc.init();
-
     }
 
     /**

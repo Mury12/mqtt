@@ -77,4 +77,9 @@ public class SubscribeController {
     public void setRepĺy(String repĺy) {
         this.repĺy = repĺy;
     }
+    
+    public boolean connect() throws MqttException{
+        return sub.connect(Config.getTopic());
+    }
+    
 }
