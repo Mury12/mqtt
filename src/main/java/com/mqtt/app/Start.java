@@ -9,7 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  */
 public class Start {
 
-     static SubscribeController sc;
+     public static SubscribeController sc;
 
     public static void main(String[] args) throws InterruptedException, MqttException {
         sc = new SubscribeController();

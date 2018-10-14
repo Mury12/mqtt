@@ -81,5 +81,8 @@ public class SubscribeController {
     public boolean connect() throws MqttException{
         return sub.connect(Config.getTopic());
     }
+    public boolean addSensor(String topic) throws MqttException{
+        return sub.connect(topic);
+    }
     
 }

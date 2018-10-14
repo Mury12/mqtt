@@ -6,6 +6,8 @@
 package com.mqtt.app.subscribe;
 
 import com.mqtt.app.Config;
+import com.mqtt.app.Start;
+import com.mqtt.app.services.ConnectionMonitor;
 import com.mqtt.app.services.ReplierService;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -47,6 +49,7 @@ public class SubscriberCallback implements MqttCallback {
         string = new String(mm.getPayload());
         System.out.println(string);
         ReplierService.setReply(string);
+        ConnectionMonitor.checkForNewSensors(Start.sc);
     }
 
     /**

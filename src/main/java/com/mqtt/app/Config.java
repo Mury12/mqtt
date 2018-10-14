@@ -10,7 +10,7 @@ public class Config {
     /**
      * @var DEFAULT_TOPIC It's the default topic for subscription.
      */
-    private static final String DEFAULT_TOPIC = "sensor/#";
+    private static final String DEFAULT_TOPIC = "sensor/addSensor";
     /**
      * @var DEFAULT_REPLY_TOPIC It's the default topic for replying.
      */
