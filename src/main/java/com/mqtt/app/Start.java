@@ -27,7 +27,7 @@ public class Start {
         }
         String topic = Config.getLocation() + "/" + Config.getMachineName() + "/temp";
 
-        pc = new PublishController(Config.getLocation() + "/" + Config.getMachineName() + "/temp", "addSensor");
+        pc = new PublishController("addSensor::"+Config.getLocation() + "/" + Config.getMachineName() + "/temp", "addSensor");
         pc = null;
         while (true) {
 
