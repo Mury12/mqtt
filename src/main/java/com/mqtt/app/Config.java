@@ -10,7 +10,7 @@ public class Config {
     /**
      * @var DEFAULT_TOPIC It's the default topic for subscription.
      */
-    private static final String DEFAULT_TOPIC = "sensor/addSensor";
+    private static final String DEFAULT_TOPIC = "sensor/#";
     /**
      * @var DEFAULT_REPLY_TOPIC It's the default topic for replying.
      */
@@ -32,6 +32,7 @@ public class Config {
      * @var DEFAULT_PORT It's the default Mosquitto Broker port.
      */
     private static final String DEFAULT_PORT = "1883";
+    private static final String DEFAULT_MAX_TEMP = "60";
     /**
      * @var reply_topic This is the current replying topic.
      */
@@ -56,7 +57,7 @@ public class Config {
      * @var timeout This is the default timeout setting.
      */
     private static int timeout = DEFAULT_TIMEOUT;
-
+    private static String max_temp = DEFAULT_MAX_TEMP;
     /**
      * This function returns the protocol type for connection.
      *
@@ -152,6 +153,10 @@ public class Config {
         setHost(DEFAULT_HOST);
         setPort(DEFAULT_PORT);
         setTopic(DEFAULT_TOPIC);
+    }
+
+    public static String getMaxTemp() {
+        return max_temp;
     }
 
 }
