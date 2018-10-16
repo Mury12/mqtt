@@ -4,3 +4,7 @@ build.xml
 /target/
 andremury*
 paho*
+/dashboard/mqttDashboard/build/
+/dashboard/mqttDashboard/dist/
+/dashboard/mqttDashboard/nbproject/private/
+/dashboard/nbproject/private/

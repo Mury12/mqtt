@@ -33,7 +33,7 @@ public class Start {
 
             pc = new PublishController(Double.toString(sc.getCpuTemp()), topic);
 
-            Thread.sleep(1000);
+            Thread.sleep(10000);
 
         }
 
