@@ -7,6 +7,7 @@ package com.mqtt.app.services;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.Start;
+import com.mqtt.app.controller.SubscribeController;
 import java.io.IOException;
 
 /**
@@ -28,9 +29,9 @@ public class SensorManager {
         String machine = payload.split(":")[1];
 
         if (Double.parseDouble(temp) <= Double.parseDouble(Config.getMaxTemp())) {
-            Start.addAtLow(payload);
+            ReplierService.addAtLow(payload);
         } else {
-            Start.addAtHigh(payload);
+            ReplierService.addAtHigh(payload);
         }
                 
     }

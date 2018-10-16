@@ -7,6 +7,7 @@ package com.mqtt.app.controller;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.subscribe.Subscriber;
+import java.util.ArrayList;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -19,6 +20,7 @@ public class SubscribeController {
     String currMessage;
     Subscriber sub;
 
+
     public SubscribeController() throws MqttException {
         sub = new Subscriber();
         this.repĺy = new String();
@@ -27,7 +29,8 @@ public class SubscribeController {
 
     /**
      * This function is responsible for initiating the Subscribe Controller.
-     * @throws MqttException 
+     *
+     * @throws MqttException
      */
     public void init(String args) throws MqttException {
         try {
@@ -62,8 +65,10 @@ public class SubscribeController {
             }
         }
     }
+
     /**
      * Gets the reply set by this class.
+     *
      * @return String reply.
      */
     public String getRepĺy() {
@@ -72,14 +77,16 @@ public class SubscribeController {
 
     /**
      * Sets the reply for this class.
+     *
      * @param repĺy String with a message reply.
      */
     public void setRepĺy(String repĺy) {
         this.repĺy = repĺy;
     }
-    
-    public boolean connect() throws MqttException{
+
+    public boolean connect() throws MqttException {
         return sub.connect(Config.getTopic());
     }
-    
+
+
 }
