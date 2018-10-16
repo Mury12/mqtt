@@ -1,5 +1,7 @@
 # Versão
-Este ramo contém a versão com interface gráfica dos módulos e configurações.
+Este ramo em desenvolvimento está contida a versão para a segunda parte do projeto. 
+Para compilar corretamente, adicionar o arquivo temp_monitor_sub.jar como biblioteca de seu projeto.
+Não esqueça de instalar corretamente o Java FX (Windows) ou OpenJFX(Linux)
 # Utilização do Git
 
 - Instalar Git
