@@ -5,15 +5,12 @@
  */
 package mqttdashboard;
 
-import static com.mqtt.app.Start.sc;
+import com.mqtt.app.Config;
 import com.mqtt.app.controller.SubscribeController;
-import com.mqtt.app.services.ReplierService;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -43,6 +40,7 @@ public class DashboardController implements Initializable {
     @FXML
     ListView temps;
     ListViewUpdater lvu;
+    static SubscribeController sc;
 
     @FXML
     private void changeSubscription(ActionEvent e) {
@@ -82,14 +80,20 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            SubscribeController sc = new SubscribeController();
+            sc = new SubscribeController();
             sc.connect();
         } catch (MqttException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         lvu = new ListViewUpdater(this.temps);
-        this.temps = lvu.updateListView();
 
+        this.temps = lvu.updateListView();
+    }
+
+    public static void changeSubscription(String topic) throws MqttException{
+        System.out.println("Changing to topic "+topic);
+        Config.setTopic(topic);
     }
 
 }
