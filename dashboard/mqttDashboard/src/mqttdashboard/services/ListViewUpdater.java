@@ -107,6 +107,8 @@ public class ListViewUpdater extends Thread {
                 MenuItem listenLocation = new MenuItem();
                 listenLocation.setText("Listen this location");
                 listenLocation.setOnAction(evt -> {
+                    
+                    lv.getItems().clear();
                     try {
                         subscribeOnRoom();
                     } catch (MqttException ex) {
@@ -203,10 +205,10 @@ public class ListViewUpdater extends Thread {
     }
 
     private void subscribeOnRoom() throws MqttException {
-        Report r = arr.get(actionIndex);
-        
-        DashboardController.changeSubscription("sensor/"+r.getLocal());
+        Report r = arr.get(actionIndex);        
+        DashboardController.changeSubscription("sensor/"+r.getLocal()+"/#");
         
     }
+
 
 }

@@ -93,7 +93,9 @@ public class DashboardController implements Initializable {
 
     public static void changeSubscription(String topic) throws MqttException{
         System.out.println("Changing to topic "+topic);
-        Config.setTopic(topic);
+        sc.disconnect();
+        Config.setTopic(topic);  
+        sc.connect();
     }
 
 }
