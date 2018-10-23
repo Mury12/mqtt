@@ -13,14 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
 import mqttdashboard.DashboardController;
 import mqttdashboard.Report;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -96,7 +92,11 @@ public class ListViewUpdater extends Thread {
                 MenuItem pwoff = new MenuItem();
                 pwoff.textProperty().bind(Bindings.format("Power off this machine"));
                 pwoff.setOnAction(evt -> {
-                    powerOffMachine();
+                    try {
+                        powerOffMachine();
+                    } catch (MqttException ex) {
+                        Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 });
                 MenuItem rmvFlist = new MenuItem();
                 rmvFlist.setText("Remove from list");
@@ -199,9 +199,11 @@ public class ListViewUpdater extends Thread {
         this.lv.getItems().remove(actionIndex);
     }
 
-    private void powerOffMachine() {
+    private boolean powerOffMachine() throws MqttException {
         Report r = arr.get(actionIndex);
         System.out.println("Shuting down " + r.getName() + " at room " + r.getLocal());
+        PowerOffMachine pof = new PowerOffMachine("sensor/"+r.getLocal()+"/"+r.getName(), 5);
+        return pof.shutDownMachine();
     }
 
     private void subscribeOnRoom() throws MqttException {
