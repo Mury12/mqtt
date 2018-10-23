@@ -172,6 +172,10 @@ public class Config {
     public static String getMachineName() {
         return machineName;
     }
+
+    public static String getMaxTemp() {
+        return "80.0";
+    }
     
     
 
