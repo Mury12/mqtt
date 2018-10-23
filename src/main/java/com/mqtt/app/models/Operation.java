@@ -18,12 +18,12 @@ public class Operation {
         this.action = action;
     }
     
-    private void doOperation() throws IOException {
+    public void doOperation() throws IOException {
         String action = this.action.split("action::")[0].split(":")[0];
         String param = this.action.split("action::")[0].split(":")[1];
-        
+        System.out.println(this.action);
         if(action.contentEquals("shutdown")){
-            String[] args = new String[] {"/bin/bash", "-c", "xterm", "with", "args"};
+            String[] args = new String[] {"/bin/bash", "-c", "ifconfig", "with", "args"};
             Process p = new ProcessBuilder(args).start();
         }
         
