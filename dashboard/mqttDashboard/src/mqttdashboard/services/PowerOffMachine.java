@@ -5,35 +5,38 @@
  */
 package mqttdashboard.services;
 
-import com.mqtt.app.Config;
-import com.mqtt.app.states.Publisher;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import mqttdashboard.controller.PublishController;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-public class PowerOffMachine {
 
-    Publisher pc;
+public class PowerOffMachine extends Thread {
+
+    PublishController pc;
     String addr;
     int seconds;
 
-    public PowerOffMachine(String addr, int seconds) throws MqttException {
-        this.pc = new Publisher();
+    public PowerOffMachine(String addr, int seconds) {
         this.addr = addr;
         this.seconds = seconds;
     }
 
-    public boolean shutDownMachine(){
-        Config.setTopic(addr);
-        
+    @Override
+    public void run() {
         try {
-            this.pc.connect();
-            this.pc.publish("action::shutdown:"+seconds, addr);
-            this.pc.disconnect();
-            return true;
+            pc = new PublishController("action::shutdown:"+seconds, addr);
+            pc.init();
         } catch (MqttException ex) {
             Logger.getLogger(PowerOffMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(PowerOffMachine.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return false;
+    }
+
+    
+    
+    public void shutDownMachine() throws InterruptedException {
+        this.start();
     }
 }

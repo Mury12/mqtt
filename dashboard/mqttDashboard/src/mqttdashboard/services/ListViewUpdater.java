@@ -94,7 +94,7 @@ public class ListViewUpdater extends Thread {
                 pwoff.setOnAction(evt -> {
                     try {
                         powerOffMachine();
-                    } catch (MqttException ex) {
+                    } catch (InterruptedException ex) {
                         Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
@@ -154,7 +154,11 @@ public class ListViewUpdater extends Thread {
     }
 
     public Double getTemperature(String payback) {
-        return Double.parseDouble(payback.split(": ")[1]);
+        if(!payback.split(":")[1].isEmpty()){
+            return Double.parseDouble(payback.split(": ")[1]);
+        }else{
+            return arr.get(actionIndex).getTemp();
+        }
     }
 
     private boolean checkIfExists(ArrayList<Report> arr, String id) {
@@ -199,11 +203,10 @@ public class ListViewUpdater extends Thread {
         this.lv.getItems().remove(actionIndex);
     }
 
-    private boolean powerOffMachine() throws MqttException {
+    private void powerOffMachine() throws InterruptedException {
         Report r = arr.get(actionIndex);
-        System.out.println("Shuting down " + r.getName() + " at room " + r.getLocal());
-        PowerOffMachine pof = new PowerOffMachine("sensor/"+r.getLocal()+"/"+r.getName(), 5);
-        return pof.shutDownMachine();
+        PowerOffMachine pof = new PowerOffMachine("server/"+r.getLocal()+"/"+r.getName(), 5);
+        pof.shutDownMachine();
     }
 
     private void subscribeOnRoom() throws MqttException {
