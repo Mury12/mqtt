@@ -23,8 +23,7 @@ public class Operation {
         String param = this.action.split("action::")[0].split(":")[1];
         System.out.println(this.action);
         if(action.contentEquals("shutdown")){
-            String[] args = new String[] {"/bin/bash", "-c", "ifconfig", "with", "args"};
-            Process p = new ProcessBuilder(args).start();
+            Runtime.getRuntime().exec("/bin/bash -c ifconfig");
         }
         
     }
