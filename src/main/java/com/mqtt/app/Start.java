@@ -2,6 +2,7 @@ package com.mqtt.app;
 
 import com.mqtt.app.controller.PublishController;
 import com.mqtt.app.controller.SensorController;
+import com.mqtt.app.controller.SubThread;
 import java.util.Scanner;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
@@ -29,6 +30,8 @@ public class Start {
 
         pc = new PublishController("addSensor::"+Config.getLocation() + "/" + Config.getMachineName() + "/temp", "addSensor");
         pc = null;
+        SubThread st = new SubThread();
+        st.watch();
         while (true) {
 
             pc = new PublishController(Double.toString(sc.getCpuTemp()), topic);

@@ -8,6 +8,7 @@ package com.mqtt.app.controller;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -15,33 +16,23 @@ import java.util.logging.Logger;
  */
 public class SubThread extends Thread {
 
-    String message;
 
-    public SubThread(String message) {
-        this.message = message;
+    public SubThread() {
     }
 
     @Override
     public void run() {
         try {
-            doOperation();
-        } catch (IOException ex) {
+            SubscribeController sc = new SubscribeController();
+            sc.connect();
+        } catch (MqttException ex) {
             Logger.getLogger(SubThread.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void doOperation() throws IOException {
-        String action = this.message.split("action::")[0].split(":")[0];
-        String param = this.message.split("action::")[0].split(":")[1];
-        
-        if(action.contentEquals("shutdown")){
-            String[] args = new String[] {"/bin/bash", "-c", "xterm", "with", "args"};
-            Process p = new ProcessBuilder(args).start();
-        }
-        
-    }
 
-    public void shutDown() {
+
+    public void watch() {
         this.start();
     }
 

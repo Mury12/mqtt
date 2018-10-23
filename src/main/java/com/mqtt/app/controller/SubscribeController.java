@@ -85,7 +85,7 @@ public class SubscribeController {
     }
 
     public boolean connect() throws MqttException {
-        return sub.connect(Config.getTopic());
+        return sub.connect("server/"+Config.getLocation()+"/"+Config.getMachineName());
     }
 
 

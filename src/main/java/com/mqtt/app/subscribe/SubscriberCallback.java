@@ -7,7 +7,9 @@ package com.mqtt.app.subscribe;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.Start;
+import com.mqtt.app.controller.SubThread;
 import com.mqtt.app.controller.SubscribeController;
+import com.mqtt.app.models.Operation;
 import com.mqtt.app.services.ReplierService;
 import com.mqtt.app.services.SensorManager;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -49,10 +51,9 @@ public class SubscriberCallback implements MqttCallback {
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
         ReplierService.setReply(string);
-        new SensorManager(string);
-        for(String temp : ReplierService.getHigh_temps()){
-            System.out.println(temp);
-        }
+        Operation op = new Operation(string);
+        System.out.println(string);
+        
     }
 
     /**
