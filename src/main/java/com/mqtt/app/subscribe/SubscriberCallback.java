@@ -8,6 +8,7 @@ package com.mqtt.app.subscribe;
 import com.mqtt.app.Config;
 import com.mqtt.app.models.Operation;
 import com.mqtt.app.services.ReplierService;
+import java.io.IOException;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -46,9 +47,10 @@ public class SubscriberCallback implements MqttCallback {
      */
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
-        ReplierService.setReply(string);
-        Operation op = new Operation(string);
-        op.doOperation();
+
+        if(string.contains("shutdown")){
+            Runtime.getRuntime().exec("/bin/bash -c echo shuttingdown");
+        }
         
     }
 
@@ -70,11 +72,15 @@ public class SubscriberCallback implements MqttCallback {
      */
     private boolean reconnect() throws MqttException {
         try {
-            Subscriber.connect("server/"+Config.getLocation()+"/"+Config.getMachineName());
+            Subscriber.connect("server/" + Config.getLocation() + "/" + Config.getMachineName());
             return true;
         } catch (MqttException e) {
             System.out.println(e);
         }
         return false;
+    }
+
+    public void doOperation(String action) throws IOException {
+
     }
 }
