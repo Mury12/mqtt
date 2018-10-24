@@ -86,49 +86,6 @@ public class ListViewUpdater extends Thread {
                 }
             });
 
-            lv.setCellFactory((ListView<String> lv) -> {
-                ListCell<String> cell = new ListCell<>();
-                ContextMenu cm = new ContextMenu();
-                MenuItem pwoff = new MenuItem();
-                pwoff.textProperty().bind(Bindings.format("Power off this machine"));
-                pwoff.setOnAction(evt -> {
-                    try {
-                        powerOffMachine();
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
-                MenuItem rmvFlist = new MenuItem();
-                rmvFlist.setText("Remove from list");
-                rmvFlist.setOnAction(evt -> {
-                    removeFromList();
-                });
-
-                MenuItem listenLocation = new MenuItem();
-                listenLocation.setText("Listen this location");
-                listenLocation.setOnAction(evt -> {
-                    
-                    lv.getItems().clear();
-                    try {
-                        subscribeOnRoom();
-                    } catch (MqttException ex) {
-                        Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                });
-                cm.getItems().addAll(pwoff, rmvFlist, listenLocation);
-
-                cell.textProperty().bind(cell.itemProperty());
-                cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                    if (isNowEmpty) {
-                        cell.setContextMenu(null);
-                    } else {
-                        cell.setContextMenu(cm);
-                    }
-                });
-
-                return cell;
-            });
-
             if (i >= 60000 / 100) {
                 arr = updateArray(arr);
                 i = 0;
@@ -142,6 +99,54 @@ public class ListViewUpdater extends Thread {
 
     public ListView<String> updateListView() {
         this.start();
+        lv.setCellFactory((ListView<String> lv) -> {
+            ListCell<String> cell = new ListCell<>();
+            ContextMenu cm = new ContextMenu();
+            if (cm.isShowing()) {
+                this.running = false;
+            } else {
+                this.running = true;
+            }
+            MenuItem pwoff = new MenuItem();
+            pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
+            pwoff.setOnAction(evt -> {
+                actionIndex = cell.getIndex();
+                try {
+                    powerOffMachine();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            MenuItem rmvFlist = new MenuItem();
+            rmvFlist.setText("Remove from list");
+            rmvFlist.setOnAction(evt -> {
+                removeFromList();
+            });
+
+            MenuItem listenLocation = new MenuItem();
+            listenLocation.setText("Listen this location");
+            listenLocation.setOnAction(evt -> {
+
+                lv.getItems().clear();
+                try {
+                    subscribeOnRoom();
+                } catch (MqttException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            cm.getItems().addAll(pwoff, rmvFlist, listenLocation);
+
+            cell.textProperty().bind(cell.itemProperty());
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(cm);
+                }
+            });
+
+            return cell;
+        });
         return lv;
     }
 
@@ -154,9 +159,9 @@ public class ListViewUpdater extends Thread {
     }
 
     public Double getTemperature(String payback) {
-        if(!payback.split(":")[1].isEmpty()){
+        if (!payback.split(":")[1].isEmpty()) {
             return Double.parseDouble(payback.split(": ")[1]);
-        }else{
+        } else {
             return arr.get(actionIndex).getTemp();
         }
     }
@@ -205,15 +210,15 @@ public class ListViewUpdater extends Thread {
 
     private void powerOffMachine() throws InterruptedException {
         Report r = arr.get(actionIndex);
-        PowerOffMachine pof = new PowerOffMachine("server/"+r.getLocal()+"/"+r.getName(), 5);
+        System.out.println(actionIndex);
+        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), 5);
         pof.shutDownMachine();
     }
 
     private void subscribeOnRoom() throws MqttException {
-        Report r = arr.get(actionIndex);        
-        DashboardController.changeSubscription("sensor/"+r.getLocal()+"/#");
-        
-    }
+        Report r = arr.get(actionIndex);
+        DashboardController.changeSubscription("sensor/" + r.getLocal() + "/#");
 
+    }
 
 }
