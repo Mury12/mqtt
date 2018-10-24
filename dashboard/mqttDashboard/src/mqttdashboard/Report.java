@@ -5,6 +5,8 @@
  */
 package mqttdashboard;
 
+import java.time.Instant;
+
 /**
  *
  * @author andremury
@@ -15,12 +17,14 @@ public final class Report {
     private String local;
     private String name;
     private Double temp;
+    private Long lastReport;
 
     public Report(String id, String local, String name, Double temp) {
         this.id = id;
         this.local = local;
         this.name = name;
         this.temp = temp;
+        this.lastReport = Instant.now().getEpochSecond();
     }
 
     public Report() {
@@ -44,6 +48,10 @@ public final class Report {
 
     public String getMessage() {
         return this.name + " at " + this.local + " is " + this.temp + "°C";
+    }
+
+    public Long getLastReport() {
+        return lastReport;
     }
 
     public void set(Report rep) {

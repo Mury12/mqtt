@@ -5,15 +5,12 @@
  */
 package mqttdashboard;
 
-import static com.mqtt.app.Start.sc;
+import com.mqtt.app.Config;
 import com.mqtt.app.controller.SubscribeController;
-import com.mqtt.app.services.ReplierService;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,45 +31,15 @@ public class DashboardController implements Initializable {
     @FXML
     Label options, low_temps, high_temps;
     @FXML
-    Button addSub, chgBroker, exit, generalOverview,
-            specificLocation, powerOffAddr, resetPanes;
+    Button exit;
     @FXML
     SplitPane mainPane;
     @FXML
-    AnchorPane leftPane, rightPane;
+    AnchorPane rightPane;
     @FXML
     ListView temps;
     ListViewUpdater lvu;
-
-    @FXML
-    private void changeSubscription(ActionEvent e) {
-        System.out.println("changed");
-    }
-
-    @FXML
-    private void changeBroker(ActionEvent e) {
-        this.temps.getItems().add("dhkjdhaksjhdkja");
-    }
-
-    @FXML
-    private void specificLocation(ActionEvent e) {
-
-    }
-
-    @FXML
-    private void powerOffMachine(ActionEvent e) {
-
-    }
-
-    @FXML
-    private void resetPanes(ActionEvent e) {
-        this.temps.getItems().clear();
-    }
-
-    @FXML
-    private void generalOverview(ActionEvent e) {
-
-    }
+    public static SubscribeController sc;
 
     @FXML
     private void exit(ActionEvent e) {
@@ -82,14 +49,17 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            SubscribeController sc = new SubscribeController();
+            sc = new SubscribeController();
             sc.connect();
         } catch (MqttException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lvu = new ListViewUpdater(this.temps);
-        this.temps = lvu.updateListView();
 
+        lvu = new ListViewUpdater(this.temps);
+
+        this.temps = lvu.updateListView();
     }
+
+
 
 }

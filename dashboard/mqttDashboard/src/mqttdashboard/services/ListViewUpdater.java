@@ -5,13 +5,25 @@
  */
 package mqttdashboard.services;
 
+import com.mqtt.app.Config;
 import com.mqtt.app.services.ReplierService;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
+import javax.swing.JOptionPane;
+import mqttdashboard.DashboardController;
 import mqttdashboard.Report;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
  *
@@ -29,6 +41,11 @@ public class ListViewUpdater extends Thread {
     private String name;
     private Double temp;
     Report rep;
+    int i = 0;
+    Boolean running = true;
+    static int actionIndex;
+    private boolean reset;
+    private String param;
 
     public ListViewUpdater(ListView lv) {
         this.lv = lv;
@@ -37,7 +54,7 @@ public class ListViewUpdater extends Thread {
 
     @Override
     public void run() {
-        while(!ReplierService.got()){
+        while (!ReplierService.got()) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException ex) {
@@ -45,34 +62,41 @@ public class ListViewUpdater extends Thread {
             }
         }
         while (true) {
-
+            i++;
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
             }
             String payback = ReplierService.getReply();
-            if(payback.contains("addSensor")){
+            if (payback.contains("addSensor")) {
                 continue;
             }
-                rep = new Report(getLocation(payback) + "::" + getMachine(payback),
-                        getLocation(payback), getMachine(payback), getTemperature(payback));
-            
+            rep = new Report(getLocation(payback) + "::" + getMachine(payback),
+                    getLocation(payback), getMachine(payback), getTemperature(payback));
+
             if (!checkIfExists(arr, rep.getId())) {
                 arr.add(rep);
             } else {
                 arr = replaceItemOnList(arr, rep);
             }
-            Platform.runLater(new Runnable() {
 
+            Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    lv.getItems().clear();
-                    for (Report r : arr) {
-                        lv.getItems().add(r.getMessage());
+                    if (running && lv != null) {
+                        lv.getItems().clear();
+                        for (Report r : arr) {
+                            lv.getItems().add(r.getMessage());
+                        }
                     }
                 }
             });
+
+            if (i >= 60000 / 100) {
+                arr = updateArray(arr);
+                i = 0;
+            }
         }
     }
 
@@ -82,6 +106,7 @@ public class ListViewUpdater extends Thread {
 
     public ListView<String> updateListView() {
         this.start();
+        setContextMenu();
         return lv;
     }
 
@@ -94,7 +119,11 @@ public class ListViewUpdater extends Thread {
     }
 
     public Double getTemperature(String payback) {
-        return Double.parseDouble(payback.split(": ")[1]);
+        if (!payback.split(":")[1].isEmpty()) {
+            return Double.parseDouble(payback.split(": ")[1]);
+        } else {
+            return arr.get(actionIndex).getTemp();
+        }
     }
 
     private boolean checkIfExists(ArrayList<Report> arr, String id) {
@@ -120,5 +149,92 @@ public class ListViewUpdater extends Thread {
         return arr;
     }
 
+    private ArrayList<Report> updateArray(ArrayList<Report> arr) {
 
+        for (Iterator<Report> it = arr.iterator(); it.hasNext();) {
+            Report r = it.next();
+            if (Instant.now().getEpochSecond() > r.getLastReport()) {
+                it.remove();
+            }
+        }
+
+        return arr;
+    }
+
+    private void removeFromList() {
+        Report r = arr.get(actionIndex);
+        System.out.println("Removing " + r.getName());
+        this.arr.remove(r);
+        this.lv.getItems().remove(actionIndex);
+    }
+
+    private void powerOffMachine() throws InterruptedException {
+        Report r = arr.get(actionIndex);
+        System.out.println(actionIndex);
+        TextInputDialog dia = new TextInputDialog("0");
+        dia.setTitle("Tempo para desligar");
+        dia.setHeaderText("Digite o tempo em minutos para desligar:");
+        dia.setContentText("(min):");
+        Optional<String> result = dia.showAndWait();
+        result.ifPresent(name -> {
+            this.param = name;
+        });
+        System.out.println(this.param);
+        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), this.param);
+        pof.shutDownMachine();
+    }
+
+    private void subscribeOnRoom() throws MqttException {
+        Report r = arr.get(actionIndex);
+        this.changeSubscription("sensor/" + r.getLocal() + "/#");
+
+    }
+
+    private void setContextMenu() {
+        lv.setCellFactory((ListView<String> lv) -> {
+            ListCell<String> cell = new ListCell<>();
+            ContextMenu cm = new ContextMenu();
+            if (cm.isShowing()) {
+                this.running = false;
+            } else {
+                this.running = true;
+            }
+
+            MenuItem pwoff = new MenuItem();
+            pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
+            pwoff.setOnAction(evt -> {
+                actionIndex = cell.getIndex();
+
+                try {
+                    powerOffMachine();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+            cm.getItems().addAll(pwoff);
+
+            cell.textProperty().bind(cell.itemProperty());
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(cm);
+                }
+            });
+            return cell;
+        });
+    }
+
+    public void reset() {
+        this.reset = true;
+    }
+
+    public void changeSubscription(String topic) throws MqttException {
+        System.out.println("Changing to topic " + topic);
+        DashboardController.sc.disconnect();
+        Config.setTopic(topic);
+        DashboardController.sc.connect();
+
+    }
 }
