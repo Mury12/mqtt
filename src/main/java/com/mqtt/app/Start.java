@@ -28,8 +28,6 @@ public class Start {
         }
         String topic = Config.getLocation() + "/" + Config.getMachineName() + "/temp";
 
-        pc = new PublishController("addSensor::"+Config.getLocation() + "/" + Config.getMachineName() + "/temp", "addSensor");
-        pc = null;
         SubThread st = new SubThread();
         st.watch();
         while (true) {

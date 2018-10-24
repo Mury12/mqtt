@@ -12,19 +12,19 @@ import java.io.IOException;
  * @author andremury
  */
 public class Operation {
-    String action;
 
-    public Operation(String action) {
+    String action;
+    String param;
+    public Operation(String action, String param) {
         this.action = action;
+        this.param = param;
     }
-    
+
     public void doOperation() throws IOException {
-        String action = this.action.split("action::")[0].split(":")[0];
-        String param = this.action.split("action::")[0].split(":")[1];
-        System.out.println(this.action);
-        if(action.contentEquals("shutdown")){
-            Runtime.getRuntime().exec("/bin/bash -c ifconfig");
+        if (this.action.contentEquals("shutdown")) {
+            String myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature.'";
+            Runtime.getRuntime().exec(new String[]{"bash", "-c", myCommand});
+            myCommand = "shutdown -t " + this.param;
         }
-        
     }
 }

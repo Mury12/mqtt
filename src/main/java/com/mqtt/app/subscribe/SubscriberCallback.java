@@ -43,15 +43,15 @@ public class SubscriberCallback implements MqttCallback {
      *
      * @param string
      * @param mm
-     * @throws Exception
+     * @throws java.io.IOException
      */
-    public void messageArrived(String string, MqttMessage mm) throws Exception {
+    public void messageArrived(String string, MqttMessage mm) throws IOException {
         string = new String(mm.getPayload());
-        System.out.println(string.split("::")[1]);
-        if(string.contains("shutdown")){
-            Runtime.getRuntime().exec("/bin/bash -c notify-send 'Alert' 'We are shutting down your PC due a hight temperature.'");
-        }
-        
+        String action = string.split("::")[1];
+        String param = string.split("::")[2];
+        Operation op = new Operation(action, param);
+        op.doOperation();
+
     }
 
     /**
@@ -78,9 +78,5 @@ public class SubscriberCallback implements MqttCallback {
             System.out.println(e);
         }
         return false;
-    }
-
-    public void doOperation(String action) throws IOException {
-
     }
 }
