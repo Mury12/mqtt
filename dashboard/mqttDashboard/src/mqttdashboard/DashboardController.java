@@ -31,45 +31,27 @@ public class DashboardController implements Initializable {
     @FXML
     Label options, low_temps, high_temps;
     @FXML
-    Button addSub, chgBroker, exit, generalOverview,
-            specificLocation, powerOffAddr, resetPanes;
+    Button exit, generalOverview, resetPanes;
     @FXML
     SplitPane mainPane;
     @FXML
-    AnchorPane leftPane, rightPane;
+    AnchorPane rightPane;
     @FXML
     ListView temps;
     ListViewUpdater lvu;
-    static SubscribeController sc;
-
-    @FXML
-    private void changeSubscription(ActionEvent e) {
-        System.out.println("changed");
-    }
-
-    @FXML
-    private void changeBroker(ActionEvent e) {
-        this.temps.getItems().add("dhkjdhaksjhdkja");
-    }
-
-    @FXML
-    private void specificLocation(ActionEvent e) {
-
-    }
-
-    @FXML
-    private void powerOffMachine(ActionEvent e) {
-
-    }
+    public static SubscribeController sc;
 
     @FXML
     private void resetPanes(ActionEvent e) {
+        lvu.reset();
         this.temps.getItems().clear();
     }
 
     @FXML
-    private void generalOverview(ActionEvent e) {
-
+    private void generalOverview(ActionEvent e) throws MqttException {
+        
+        this.temps = lvu.updateListView();
+        
     }
 
     @FXML
@@ -85,17 +67,12 @@ public class DashboardController implements Initializable {
         } catch (MqttException ex) {
             Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         lvu = new ListViewUpdater(this.temps);
 
         this.temps = lvu.updateListView();
     }
 
-    public static void changeSubscription(String topic) throws MqttException{
-        System.out.println("Changing to topic "+topic);
-        sc.disconnect();
-        Config.setTopic(topic);  
-        sc.connect();
-    }
+
 
 }

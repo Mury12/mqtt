@@ -5,6 +5,7 @@
  */
 package mqttdashboard.services;
 
+import com.mqtt.app.Config;
 import com.mqtt.app.services.ReplierService;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class ListViewUpdater extends Thread {
     int i = 0;
     Boolean running = true;
     static int actionIndex;
+    private boolean reset;
 
     public ListViewUpdater(ListView lv) {
         this.lv = lv;
@@ -74,10 +76,11 @@ public class ListViewUpdater extends Thread {
             } else {
                 arr = replaceItemOnList(arr, rep);
             }
+
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    if (running) {
+                    if (running && lv != null) {
                         lv.getItems().clear();
                         for (Report r : arr) {
                             lv.getItems().add(r.getMessage());
@@ -99,54 +102,7 @@ public class ListViewUpdater extends Thread {
 
     public ListView<String> updateListView() {
         this.start();
-        lv.setCellFactory((ListView<String> lv) -> {
-            ListCell<String> cell = new ListCell<>();
-            ContextMenu cm = new ContextMenu();
-            if (cm.isShowing()) {
-                this.running = false;
-            } else {
-                this.running = true;
-            }
-            MenuItem pwoff = new MenuItem();
-            pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
-            pwoff.setOnAction(evt -> {
-                actionIndex = cell.getIndex();
-                try {
-                    powerOffMachine();
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            MenuItem rmvFlist = new MenuItem();
-            rmvFlist.setText("Remove from list");
-            rmvFlist.setOnAction(evt -> {
-                removeFromList();
-            });
-
-            MenuItem listenLocation = new MenuItem();
-            listenLocation.setText("Listen this location");
-            listenLocation.setOnAction(evt -> {
-
-                lv.getItems().clear();
-                try {
-                    subscribeOnRoom();
-                } catch (MqttException ex) {
-                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            cm.getItems().addAll(pwoff, rmvFlist, listenLocation);
-
-            cell.textProperty().bind(cell.itemProperty());
-            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
-                if (isNowEmpty) {
-                    cell.setContextMenu(null);
-                } else {
-                    cell.setContextMenu(cm);
-                }
-            });
-
-            return cell;
-        });
+        setContextMenu();
         return lv;
     }
 
@@ -217,8 +173,54 @@ public class ListViewUpdater extends Thread {
 
     private void subscribeOnRoom() throws MqttException {
         Report r = arr.get(actionIndex);
-        DashboardController.changeSubscription("sensor/" + r.getLocal() + "/#");
+        this.changeSubscription("sensor/" + r.getLocal() + "/#");
 
     }
 
+    private void setContextMenu() {
+        lv.setCellFactory((ListView<String> lv) -> {
+            ListCell<String> cell = new ListCell<>();
+            ContextMenu cm = new ContextMenu();
+            if (cm.isShowing()) {
+                this.running = false;
+            } else {
+                this.running = true;
+            }
+
+            MenuItem pwoff = new MenuItem();
+            pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
+            pwoff.setOnAction(evt -> {
+                actionIndex = cell.getIndex();
+                try {
+                    powerOffMachine();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+            cm.getItems().addAll(pwoff);
+
+            cell.textProperty().bind(cell.itemProperty());
+            cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
+                if (isNowEmpty) {
+                    cell.setContextMenu(null);
+                } else {
+                    cell.setContextMenu(cm);
+                }
+            });
+            return cell;
+        });
+    }
+
+    public void reset() {
+        this.reset = true;
+    }
+
+    public void changeSubscription(String topic) throws MqttException {
+        System.out.println("Changing to topic " + topic);
+        DashboardController.sc.disconnect();
+        Config.setTopic(topic);
+        DashboardController.sc.connect();
+
+    }
 }
