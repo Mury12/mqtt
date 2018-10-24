@@ -47,9 +47,9 @@ public class SubscriberCallback implements MqttCallback {
      */
     public void messageArrived(String string, MqttMessage mm) throws Exception {
         string = new String(mm.getPayload());
-
+        System.out.println(string.split("::")[1]);
         if(string.contains("shutdown")){
-            Runtime.getRuntime().exec("/bin/bash -c echo shuttingdown");
+            Runtime.getRuntime().exec("/bin/bash -c notify-send 'Alert' 'We are shutting down your PC due a hight temperature.'");
         }
         
     }
