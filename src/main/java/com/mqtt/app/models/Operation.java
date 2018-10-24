@@ -22,11 +22,21 @@ public class Operation {
     }
 
     public void doOperation() throws IOException {
+        String plat = new String();
+        String myCommand = new String();
         if (this.action.contentEquals("shutdown")) {
-            String myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature.'";
-            Runtime.getRuntime().exec(new String[]{"bash", "-c", myCommand});
+            if(System.getProperty("os.name").contains("Windows")){
+                plat = "cmd";
+                int p = Integer.parseInt(this.param)*60;
+                myCommand = "shutdown -t -s "+ p;
+            }else{
+                plat = "bash";
+            myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature.'";
+            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
             myCommand = "shutdown -t " + this.param;
-            Runtime.getRuntime().exec(new String[]{"bash", "-c", myCommand});
+            }
+            System.out.println(this.param);
+//            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
         }
     }
 }
