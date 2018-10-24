@@ -17,7 +17,7 @@ public class PowerOffMachine extends Thread {
     String addr;
     int seconds;
 
-    public PowerOffMachine(String addr, int seconds) {
+    public PowerOffMachine(String addr, String min) {
         this.addr = addr;
         this.seconds = seconds;
     }

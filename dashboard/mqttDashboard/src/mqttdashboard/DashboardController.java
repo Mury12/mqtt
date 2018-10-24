@@ -31,7 +31,7 @@ public class DashboardController implements Initializable {
     @FXML
     Label options, low_temps, high_temps;
     @FXML
-    Button exit, generalOverview, resetPanes;
+    Button exit;
     @FXML
     SplitPane mainPane;
     @FXML
@@ -40,19 +40,6 @@ public class DashboardController implements Initializable {
     ListView temps;
     ListViewUpdater lvu;
     public static SubscribeController sc;
-
-    @FXML
-    private void resetPanes(ActionEvent e) {
-        lvu.reset();
-        this.temps.getItems().clear();
-    }
-
-    @FXML
-    private void generalOverview(ActionEvent e) throws MqttException {
-        
-        this.temps = lvu.updateListView();
-        
-    }
 
     @FXML
     private void exit(ActionEvent e) {

@@ -10,6 +10,7 @@ import com.mqtt.app.services.ReplierService;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -18,6 +19,8 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextInputDialog;
+import javax.swing.JOptionPane;
 import mqttdashboard.DashboardController;
 import mqttdashboard.Report;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -42,6 +45,7 @@ public class ListViewUpdater extends Thread {
     Boolean running = true;
     static int actionIndex;
     private boolean reset;
+    private String param;
 
     public ListViewUpdater(ListView lv) {
         this.lv = lv;
@@ -167,7 +171,8 @@ public class ListViewUpdater extends Thread {
     private void powerOffMachine() throws InterruptedException {
         Report r = arr.get(actionIndex);
         System.out.println(actionIndex);
-        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), 5);
+
+        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), param);
         pof.shutDownMachine();
     }
 
@@ -191,6 +196,14 @@ public class ListViewUpdater extends Thread {
             pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
             pwoff.setOnAction(evt -> {
                 actionIndex = cell.getIndex();
+                TextInputDialog dia = new TextInputDialog("0");
+                dia.setTitle("Tempo para desligar");
+                dia.setHeaderText("Digite o tempo em minutos para desligar:");
+                dia.setContentText("(min):");
+                Optional<String> result = dia.showAndWait();
+                result.ifPresent(name -> {
+                    this.param = name;
+                });
                 try {
                     powerOffMachine();
                 } catch (InterruptedException ex) {
