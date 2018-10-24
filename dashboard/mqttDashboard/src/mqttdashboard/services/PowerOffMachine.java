@@ -25,7 +25,7 @@ public class PowerOffMachine extends Thread {
     @Override
     public void run() {
         try {
-            pc = new PublishController("action::shutdown:"+seconds, addr);
+            pc = new PublishController("action::shutdown::"+seconds, addr);
             pc.init();
         } catch (MqttException ex) {
             Logger.getLogger(PowerOffMachine.class.getName()).log(Level.SEVERE, null, ex);
