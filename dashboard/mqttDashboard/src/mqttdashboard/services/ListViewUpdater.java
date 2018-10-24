@@ -171,7 +171,15 @@ public class ListViewUpdater extends Thread {
     private void powerOffMachine() throws InterruptedException {
         Report r = arr.get(actionIndex);
         System.out.println(actionIndex);
-
+        TextInputDialog dia = new TextInputDialog("0");
+        dia.setTitle("Tempo para desligar");
+        dia.setHeaderText("Digite o tempo em minutos para desligar:");
+        dia.setContentText("(min):");
+        Optional<String> result = dia.showAndWait();
+        result.ifPresent(name -> {
+            this.param = name;
+        });
+        System.out.println(param);
         PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), param);
         pof.shutDownMachine();
     }
@@ -196,14 +204,7 @@ public class ListViewUpdater extends Thread {
             pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
             pwoff.setOnAction(evt -> {
                 actionIndex = cell.getIndex();
-                TextInputDialog dia = new TextInputDialog("0");
-                dia.setTitle("Tempo para desligar");
-                dia.setHeaderText("Digite o tempo em minutos para desligar:");
-                dia.setContentText("(min):");
-                Optional<String> result = dia.showAndWait();
-                result.ifPresent(name -> {
-                    this.param = name;
-                });
+
                 try {
                     powerOffMachine();
                 } catch (InterruptedException ex) {
