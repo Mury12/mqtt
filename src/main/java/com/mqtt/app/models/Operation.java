@@ -31,12 +31,12 @@ public class Operation {
                 myCommand = "shutdown -t -s "+ p;
             }else{
                 plat = "bash";
-            myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature.'";
+            myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature. TTL: "+this.param+" min.'";
             Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
             myCommand = "shutdown -t " + this.param;
             }
             System.out.println(this.param);
-//            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
+            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
         }
     }
 }
