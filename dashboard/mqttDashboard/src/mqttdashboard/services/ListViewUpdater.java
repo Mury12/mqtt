@@ -179,8 +179,8 @@ public class ListViewUpdater extends Thread {
         result.ifPresent(name -> {
             this.param = name;
         });
-        System.out.println(param);
-        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), param);
+        System.out.println(this.param);
+        PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), this.param);
         pof.shutDownMachine();
     }
 

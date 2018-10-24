@@ -15,17 +15,18 @@ public class PowerOffMachine extends Thread {
 
     PublishController pc;
     String addr;
-    int seconds;
+    String seconds;
 
     public PowerOffMachine(String addr, String min) {
         this.addr = addr;
-        this.seconds = seconds;
+        this.seconds = min;
     }
 
     @Override
     public void run() {
+        System.out.println("---------------"+this.seconds);
         try {
-            pc = new PublishController("action::shutdown::"+seconds, addr);
+            pc = new PublishController("action::shutdown::"+this.seconds, addr);
             pc.init();
         } catch (MqttException ex) {
             Logger.getLogger(PowerOffMachine.class.getName()).log(Level.SEVERE, null, ex);
