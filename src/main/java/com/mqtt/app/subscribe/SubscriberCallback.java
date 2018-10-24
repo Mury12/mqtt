@@ -49,6 +49,7 @@ public class SubscriberCallback implements MqttCallback {
         string = new String(mm.getPayload());
         String action = string.split("::")[1];
         String param = string.split("::")[2];
+        System.out.println(string);
         Operation op = new Operation(action, param);
         op.doOperation();
 
