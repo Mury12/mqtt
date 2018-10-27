@@ -229,7 +229,7 @@ public class ListViewUpdater extends Thread {
                     Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            cm.getItems().addAll(pwoff);
+            cm.getItems().addAll(pwoff, remote);
 
             cell.textProperty().bind(cell.itemProperty());
             cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
