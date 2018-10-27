@@ -183,6 +183,14 @@ public class ListViewUpdater extends Thread {
         PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), this.param);
         pof.shutDownMachine();
     }
+    private void remoteControl() throws InterruptedException {
+        Report r = arr.get(actionIndex);
+        System.out.println(actionIndex);
+        this.param = "";
+        System.out.println(this.param);
+        RemoteAccess rma = new RemoteAccess("server/" + r.getLocal() + "/" + r.getName(), this.param);
+        rma.remoteControl();
+    }
 
     private void subscribeOnRoom() throws MqttException {
         Report r = arr.get(actionIndex);
@@ -199,7 +207,6 @@ public class ListViewUpdater extends Thread {
             } else {
                 this.running = true;
             }
-
             MenuItem pwoff = new MenuItem();
             pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
             pwoff.setOnAction(evt -> {
@@ -211,7 +218,17 @@ public class ListViewUpdater extends Thread {
                     Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-
+            MenuItem remote = new MenuItem();
+            remote.textProperty().bind(Bindings.format("Remote to %s", cell.itemProperty()));
+            remote.setOnAction((evt) -> {
+                actionIndex = cell.getIndex();
+                
+                try {
+                    remoteControl();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
             cm.getItems().addAll(pwoff);
 
             cell.textProperty().bind(cell.itemProperty());
