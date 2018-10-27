@@ -30,7 +30,7 @@ public class RemoteAccess extends Thread {
             openxTerm();
             try {
                 
-                pc = new PublishController("action::remote::"+this.param, addr);
+                pc = new PublishController("action::remote::"+5, addr);
                 pc.init();
             } catch (MqttException ex) {
                 Logger.getLogger(RemoteAccess.class.getName()).log(Level.SEVERE, null, ex);
