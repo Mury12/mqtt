@@ -22,6 +22,10 @@ public class PowerOffMachine extends Thread {
         this.seconds = min;
     }
 
+    public PowerOffMachine() {
+
+    }
+
     @Override
     public void run() {
         System.out.println("---------------"+this.seconds);
@@ -39,5 +43,10 @@ public class PowerOffMachine extends Thread {
     
     public void shutDownMachine() throws InterruptedException {
         this.start();
+    }
+
+    void setPath(String addr, String param) {
+        this.addr = addr;
+        this.seconds = param;
     }
 }
