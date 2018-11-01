@@ -15,6 +15,7 @@ public class Start {
     public static SensorController sc = new SensorController();
 
     public static void main(String[] args) throws InterruptedException, MqttException {
+        System.out.println(System.getProperty("os.name"));
         PublishController pc;
 //        GUI.go(args);
         Scanner s = new Scanner(System.in);

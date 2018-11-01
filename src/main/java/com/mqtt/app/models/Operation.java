@@ -17,17 +17,21 @@ public class Operation {
 
     String action;
     String param;
+    boolean win = false;
 
     public Operation(String action, String param) {
         this.action = action;
         this.param = param;
+        if (System.getProperty("os.name").matches("^[wW]indows")) {
+            this.win = true;
+        }
     }
 
     public void doOperation() throws IOException, InterruptedException {
 
         if (this.action.contentEquals("shutdown")) {
             shutdown();
-        }else if(this.action.contentEquals("remote")){
+        } else if (this.action.contentEquals("remote")) {
             remote();
         }
     }
@@ -36,19 +40,25 @@ public class Operation {
         String plat = new String();
         String myCommand = new String();
 
-        plat = "bash";
-        myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature. TTL: " + this.param + " min.'";
-        Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
-        myCommand = "shutdown -t " + this.param;
+        if (!win) {
+            plat = "bash";
+            myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature. TTL: " + this.param + " min.'";
+            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
+            myCommand = "shutdown -t " + this.param;
+        } else {
+            plat = "cmd";
+            int sec = Integer.parseInt(this.param) * 60;
+            myCommand = "shutdown /s /f /t " + sec;
+        }
 
-        System.out.println(this.param);
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
+
     }
 
     private void remote() throws IOException, InterruptedException {
         String plat = new String();
         String myCommand = new String();
-        
+
         plat = "bash";
         myCommand = "notify-send 'Alert' 'We are remote accessing this computer due to bad reports.'";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
