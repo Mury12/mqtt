@@ -50,7 +50,7 @@ public class Operation {
             plat = "cmd";
             int sec = Integer.parseInt(this.param) * 60;
             myCommand = "shutdown /s /f /t " + sec;
-            arg = "\\c";
+            arg = "/c";
         }
 
         Runtime.getRuntime().exec(new String[]{plat, arg, myCommand});
