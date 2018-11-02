@@ -21,8 +21,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextInputDialog;
 import javax.swing.JOptionPane;
-import mqttdashboard.DashboardController;
-import mqttdashboard.Report;
+import mqttdashboard.controller.DashboardController;
+import mqttdashboard.models.Report;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 /**
@@ -61,7 +61,7 @@ public class ListViewUpdater extends Thread {
                 Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        while (true) {
+        while (running) {
             i++;
             try {
                 Thread.sleep(100);
@@ -140,12 +140,13 @@ public class ListViewUpdater extends Thread {
 
     private ArrayList<Report> replaceItemOnList(ArrayList<Report> arr, Report rep) {
         int i = 0;
-        for (Report r : arr) {
-            if (!r.getId().contentEquals(rep.getId())) {
+        for(Report r : arr){
+            if(r.getId().matches(rep.getId())){
                 arr.get(i).set(rep);
             }
             ++i;
         }
+
         return arr;
     }
 
@@ -170,22 +171,50 @@ public class ListViewUpdater extends Thread {
 
     private void powerOffMachine() throws InterruptedException {
         Report r = arr.get(actionIndex);
-        System.out.println(actionIndex);
         TextInputDialog dia = new TextInputDialog("0");
         dia.setTitle("Tempo para desligar");
         dia.setHeaderText("Digite o tempo em minutos para desligar:");
         dia.setContentText("(min):");
         Optional<String> result = dia.showAndWait();
         result.ifPresent(name -> {
-            this.param = name;
+            if (name != null) {
+                this.param = name;
+            } else {
+                this.param = "0";
+            }
         });
-        System.out.println(this.param);
         PowerOffMachine pof = new PowerOffMachine("server/" + r.getLocal() + "/" + r.getName(), this.param);
         pof.shutDownMachine();
     }
+
+    private void powerOffRecursive() throws InterruptedException {
+        TextInputDialog dia = new TextInputDialog("0");
+        dia.setTitle("Tempo para desligar");
+        dia.setHeaderText("Digite o tempo em minutos para desligar TODAS as máquinas:");
+        dia.setContentText("(min):");
+        Optional<String> result = dia.showAndWait();
+        result.ifPresent(name -> {
+            if (name != null) {
+                this.param = name;
+            } else {
+                this.param = "0";
+            }
+        });
+
+        PowerOffMachine pof;
+
+        for (Iterator<Report> it = arr.iterator(); it.hasNext();) {
+            Report r = it.next();
+            pof = null;
+            pof = new PowerOffMachine();
+            pof.setPath("server/" + r.getLocal() + "/" + r.getName(), this.param);
+            pof.shutDownMachine();
+        }
+
+    }
+
     private void remoteControl() throws InterruptedException {
         Report r = arr.get(actionIndex);
-        System.out.println(actionIndex);
         this.param = "";
         System.out.println(this.param);
         RemoteAccess rma = new RemoteAccess("server/" + r.getLocal() + "/" + r.getName(), this.param);
@@ -207,8 +236,9 @@ public class ListViewUpdater extends Thread {
             } else {
                 this.running = true;
             }
+
             MenuItem pwoff = new MenuItem();
-            pwoff.textProperty().bind(Bindings.format("Power off this machine %s", cell.itemProperty()));
+            pwoff.textProperty().bind(Bindings.format("Desligar"));
             pwoff.setOnAction(evt -> {
                 actionIndex = cell.getIndex();
 
@@ -218,18 +248,29 @@ public class ListViewUpdater extends Thread {
                     Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
+
             MenuItem remote = new MenuItem();
-            remote.textProperty().bind(Bindings.format("Remote to %s", cell.itemProperty()));
+            remote.textProperty().bind(Bindings.format("Acesso remoto"));
             remote.setOnAction((evt) -> {
                 actionIndex = cell.getIndex();
-                
+
                 try {
                     remoteControl();
                 } catch (InterruptedException ex) {
                     Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
-            cm.getItems().addAll(pwoff, remote);
+
+            MenuItem pwall = new MenuItem();
+            pwall.textProperty().bind(Bindings.format("Desligar recursivamente"));
+            pwall.setOnAction(evt -> {
+                try {
+                    powerOffRecursive();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(ListViewUpdater.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+            cm.getItems().addAll(remote, pwoff, pwall);
 
             cell.textProperty().bind(cell.itemProperty());
             cell.emptyProperty().addListener((obs, wasEmpty, isNowEmpty) -> {
@@ -253,5 +294,9 @@ public class ListViewUpdater extends Thread {
         Config.setTopic(topic);
         DashboardController.sc.connect();
 
+    }
+
+    public void toggleRun() {
+        this.running = !this.running;
     }
 }

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mqttdashboard;
+package mqttdashboard.models;
 
 import java.time.Instant;
 
@@ -23,6 +23,9 @@ public final class Report {
         this.id = id;
         this.local = local;
         this.name = name;
+        if(temp > 150){
+            temp /= 10;
+        }
         this.temp = temp;
         this.lastReport = Instant.now().getEpochSecond();
     }
@@ -47,7 +50,7 @@ public final class Report {
     }
 
     public String getMessage() {
-        return this.name + " at " + this.local + " is " + this.temp + "°C";
+        return this.name + " em " + this.local + " está a " + this.temp + "°C";
     }
 
     public Long getLastReport() {
@@ -56,6 +59,7 @@ public final class Report {
 
     public void set(Report rep) {
         this.temp = rep.getTemp();
+        this.lastReport = rep.getLastReport();
     }
 
 }

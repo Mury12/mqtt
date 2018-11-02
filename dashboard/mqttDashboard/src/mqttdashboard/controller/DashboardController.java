@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mqttdashboard;
+package mqttdashboard.controller;
 
 import com.mqtt.app.Config;
 import com.mqtt.app.controller.SubscribeController;
@@ -31,11 +31,11 @@ public class DashboardController implements Initializable {
     @FXML
     Label options, low_temps, high_temps;
     @FXML
-    Button exit;
+    Button exit, clearPane;
     @FXML
     SplitPane mainPane;
     @FXML
-    AnchorPane rightPane;
+    AnchorPane rightPane, leftPane;
     @FXML
     ListView temps;
     ListViewUpdater lvu;
@@ -44,6 +44,13 @@ public class DashboardController implements Initializable {
     @FXML
     private void exit(ActionEvent e) {
         System.exit(0);
+    }
+    @FXML
+    private void refreshList(){
+        lvu.toggleRun();
+        lvu = null;
+        lvu = new ListViewUpdater(this.temps);
+        this.temps = lvu.updateListView();
     }
 
     @Override
