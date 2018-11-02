@@ -49,11 +49,11 @@ public class Operation {
             myCommand = "shutdown -t " + this.param;
         } else {
             plat = "cmd";
+            arg = "/c";
             myCommand = "msg %username% 'We are shutting down your PC due a high temperature. TTL: " + this.param + " min.'";
-            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
+            Runtime.getRuntime().exec(new String[]{plat, arg, myCommand});
             int sec = Integer.parseInt(this.param) * 60;
             myCommand = "shutdown /s /f /t " + sec;
-            arg = "/c";
         }
 
         Runtime.getRuntime().exec(new String[]{plat, arg, myCommand});
