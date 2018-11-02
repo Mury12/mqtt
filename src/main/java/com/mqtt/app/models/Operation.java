@@ -43,11 +43,14 @@ public class Operation {
 
         if (!win) {
             plat = "bash";
+            arg = "-c";
             myCommand = "notify-send 'Alert' 'We are shutting down your PC due a high temperature. TTL: " + this.param + " min.'";
             Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
             myCommand = "shutdown -t " + this.param;
         } else {
             plat = "cmd";
+            myCommand = "msg %username% 'We are shutting down your PC due a high temperature. TTL: " + this.param + " min.'";
+            Runtime.getRuntime().exec(new String[]{plat, "-c", myCommand});
             int sec = Integer.parseInt(this.param) * 60;
             myCommand = "shutdown /s /f /t " + sec;
             arg = "/c";
