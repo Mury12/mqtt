@@ -93,10 +93,6 @@ public class ListViewUpdater extends Thread {
                 }
             });
 
-            if (i >= 60000 / 100) {
-                arr = updateArray(arr);
-                i = 0;
-            }
         }
     }
 
